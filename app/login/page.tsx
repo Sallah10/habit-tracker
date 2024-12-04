@@ -26,16 +26,16 @@ const login = () => {
             <form>
               <div className="grid w-full items-center gap-14">
                 <div className="flex flex-col space-y-1.5 gap-4">
-                  <Input id="name" placeholder="User" className='bg-[#D9D9D9] text-center'/>
-                  <Input id="name" placeholder="Password" className='bg-[#D9D9D9] text-center'/>
+                  <Input id="name" placeholder="User" className='bg-[#D9D9D9] text-center text-base'/>
+                  <Input id="name" placeholder="Password" className='bg-[#D9D9D9] text-center text-base'/>
                 </div>
-                <Button>Login</Button>
+                <Button className='text-base'>Login</Button>
               </div>
             </form>
           </CardContent>
           {/* <Button>Deploy</Button> */}
           <CardFooter className='text-white'>
-            Don&apos;t have an account? <a href="" className='ml-1'>Sign Up Here</a>
+            Don&apos;t have an account? <a href="/signup" className='ml-1'>Sign Up Here</a>
           </CardFooter>
         </Card>
       </section>

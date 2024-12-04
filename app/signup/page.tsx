@@ -28,14 +28,15 @@ const signup = () => {
                 <div className="flex flex-col space-y-1.5 gap-4">
                   <Input id="name" placeholder="User" className='bg-[#D9D9D9] text-center'/>
                   <Input id="name" placeholder="Password" className='bg-[#D9D9D9] text-center'/>
+                  <Input id="name" placeholder="Confirm Password" className='bg-[#D9D9D9] text-center'/>
                 </div>
-                <Button>Login</Button>
+                <Button>Sign Up</Button>
               </div>
             </form>
           </CardContent>
           {/* <Button>Deploy</Button> */}
           <CardFooter className='text-white'>
-            Don&apos;t have an account? <a href="" className='ml-1'>Sign Up Here</a>
+            Already have an account? <a href="/login" className='ml-1'>Login Here</a>
           </CardFooter>
         </Card>
       </section>
