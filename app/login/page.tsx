@@ -1,6 +1,5 @@
 import React from 'react'
-import Image from 'next/image'
-import logo from "/app/assets/HabiTapp.png"
+import Hero from "../hero"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -11,16 +10,12 @@ import {
   // CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
 
 const login = () => {
   return (
     <>
       <section className='bg-[#26252F] min-h-screen pt-10 px-6 gap-16 flex flex-col'>
-        <div>
-          <Image src={logo} alt="Logo" className=""/>
-          <h2 className="text-white text-lg ">&quot;Your Habits in an App with just one Tap&quot;</h2>
-        </div>
+        <Hero/>
         <Card className="bg-transparent border-0">
           <CardContent>
             <form>
