@@ -1,8 +1,14 @@
 import React from 'react'
+import Hero from "../hero"
 
 const Focus = () => {
   return (
-    <div>Focus</div>
+    <>
+      <section>
+        <Hero/>
+        focus
+      </section>
+    </>
   )
 }
 

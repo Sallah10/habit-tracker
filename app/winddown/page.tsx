@@ -1,8 +1,14 @@
 import React from 'react'
+import Hero from "../hero"
 
 const wind = () => {
   return (
-    <div>wind</div>
+    <>
+      <section className='general'>
+        <Hero/>
+        wind down
+      </section>
+    </>
   )
 }
 

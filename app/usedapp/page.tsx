@@ -7,7 +7,7 @@ const used = () => {
       <section className='general'>
         <Hero/>
         <div>
-
+          most used app
         </div>
       </section>
     </>

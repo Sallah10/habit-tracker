@@ -14,7 +14,7 @@ import Hero from "../hero"
 const signup = () => {
   return (
     <>
-      <section className='bg-[#26252F] min-h-screen pt-10 px-6 gap-16 flex flex-col'>
+      <section className='general'>
         <Hero/>
         <Card className="bg-transparent border-0">
           <CardContent>
