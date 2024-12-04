@@ -12,9 +12,9 @@ const dashboard = () => {
             <h1>10h 23m</h1>
           </div>
           <div className='text-white flex flex-col justify-center items-center gap-4'>
-            <a href=""><h1 className='text-2xl'> Wind Down</h1><small className='items-center justify-center flex'>off</small></a>
-            <a href=""><h1 className='text-2xl'> Focus Mode</h1> <small className='items-center justify-center flex'>off</small></a>
-            <a href=""><h1 className='text-2xl'> Most Used Apps</h1></a>
+            <a href="/winddown"><h1 className='text-2xl'> Wind Down</h1><small className='items-center justify-center flex'>off</small></a>
+            <a href="/focus"><h1 className='text-2xl'> Focus Mode</h1> <small className='items-center justify-center flex'>off</small></a>
+            <a href="/usedapp"><h1 className='text-2xl'> Most Used Apps</h1></a>
           </div>
         </div>
         <Component/>
