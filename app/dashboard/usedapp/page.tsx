@@ -1,15 +1,17 @@
 import React from 'react'
-import Hero from "../hero"
+import Hero from "../../hero"
 
-const wind = () => {
+const used = () => {
   return (
     <>
       <section className='general'>
         <Hero/>
-        wind down
+        <div>
+          most used app
+        </div>
       </section>
     </>
   )
 }
 
-export default wind
+export default used
