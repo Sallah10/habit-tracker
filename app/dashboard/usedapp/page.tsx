@@ -13,13 +13,13 @@ const used = () => {
     <>
       <section className='general'>
         <Hero/>
-        <div className='bg-[#D9D9D9]'>
+        <div className='bg-[#D9D9D9] rounded-lg flex flex-col gap-3 p-4'>
           <div>
-            <div>
+            <div className='flex items-center gap-4'>
               <Image src={icon0} alt='Facebook'/>
-              <div>
-                <h1> Facebook </h1>
-                <p>2 hours and 17 minutes</p>
+              <div className='text-black self-center items-center justify-center'>
+                <h1 className='text-xl mx-auto self-center items-center'> Facebook </h1>
+                <p className='text-lg self-center'>2 hours and 17 minutes</p>
               </div>
             </div>
             <div>
