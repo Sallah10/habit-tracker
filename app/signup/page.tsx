@@ -3,10 +3,7 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  // CardDescription,
   CardFooter,
-  // CardHeader,
-  // CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import Hero from "../hero"
@@ -29,7 +26,6 @@ const signup = () => {
               </div>
             </form>
           </CardContent>
-          {/* <Button>Deploy</Button> */}
           <CardFooter className='text-white'>
             Already have an account? <a href="/login" className='ml-1'>Login Here</a>
           </CardFooter>

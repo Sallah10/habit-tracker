@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  // CardDescription,
   CardFooter,
-  // CardHeader,
-  // CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 
@@ -28,7 +25,6 @@ const login = () => {
               </div>
             </form>
           </CardContent>
-          {/* <Button>Deploy</Button> */}
           <CardFooter className='text-white'>
             Don&apos;t have an account? <a href="/signup" className='ml-1'>Sign Up Here</a>
           </CardFooter>
