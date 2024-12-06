@@ -1,7 +1,7 @@
 import React from 'react'
 import Hero from "../../hero"
 import Image from 'next/image'
-import icon0 from "/app/assets/FB.png"
+import icon0 from "/app/assets/Container-Icon-8.png"
 import icon1 from "/app/assets/Container Icon.png"
 import icon2 from "/app/assets/Container Icon-1.png"
 import icon3 from "/app/assets/Container Icon-2.png"
