@@ -16,7 +16,7 @@ const signup = () => {
     <>
       <section className='general'>
         <Hero/>
-        <Card className="bg-transparent border-0">
+        <Card className="bg-transparent border-0 self-center">
           <CardContent>
             <form>
               <div className="grid w-full items-center gap-14">

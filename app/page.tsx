@@ -1,8 +1,8 @@
 import Image from "next/image";
-import logo from "/app/assets/HabiTapp.png"
+// import logo from "/app/assets/HabiTapp.png"
 import bgImage from "/app/assets/BG Habit 2.png"
 import { Button } from "@/components/ui/button";
-
+import Hero from "./hero"
 
 export default function Home() {
   return (
@@ -13,7 +13,7 @@ export default function Home() {
       style={{
         backgroundImage: `url('C:\Users\DELL\Desktop\habit-tracker\app\BG Habit 2.png')`
       }}> */}
-      <div className="mx-auto px-6 gap-4 flex flex-col items-center relative min-h-screen w-full">
+      <div className="mx-auto px-6 gap-2 md:gap-24 flex flex-col items-center relative min-h-screen w-full">
         <Image
           src={bgImage}
           alt="Background"
@@ -21,12 +21,9 @@ export default function Home() {
           priority
           className="absolute z-[-1] object-cover w-full h-full"
         />
-        <div>
-          <Image src={logo} alt="Logo" className="mt-8"/>
-          <h2 className="text-white text-lg ">&quot;Your Habits in an App with just one Tap&quot;</h2>
-        </div>
+        <Hero/>
         <div  className="mt-64 mx-auto flex self-center">
-          <a href="/login"><Button> Get Started</Button></a>
+          <a href="/login"><Button className="p-8 text-xl md:mb-48"> Get Started</Button></a>
         </div>
       </div>
     </>

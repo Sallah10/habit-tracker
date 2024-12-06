@@ -16,8 +16,8 @@ const wind = () => {
     <>
       <section className='general'>
         <Hero/>
-        <div className='bg-[#D9D9D9] rounded-lg gap-10 flex flex-col px-4 py-6 mb-10'>
-          <div className='flex justify-between items-center'>
+        <div className='bg-[#D9D9D9] rounded-lg gap-10 flex flex-col items-center px-4 py-6 mb-6 max-w-[500px] self-center'>
+          <div className='flex justify-between w-full items-center'>
             <h1 className='text-2xl'> Wind Down </h1>
             <Switch
             checked={focusMode}
@@ -25,15 +25,15 @@ const wind = () => {
           </div>
             <div className='flex '>
               { focusMode ? 
-                <div className='flex flex-col gap-8'>
-                  <div className='flex flex-col gap-4 md:flex-row md:justify-between'>
+                <div className='flex flex-col gap-8 md:gap-16'>
+                  <div className='flex flex-col gap-4 md:flex-row md:justify-between md:px-10'>
                     <div className='flex justify-between md:flex-col'>
-                      <h1 className='text-2xl'>Start:</h1>
-                      <p className='text-xl'>10:15 PM</p>
+                      <h1 className='text-2xl self-center'>Start:</h1>
+                      <p className='text-xl flex'>10:15 PM</p>
                     </div>
                     <div className='flex justify-between md:flex-col'>
-                      <h1 className='text-2xl'>End:</h1>
-                      <p className='text-xl'>11:15 PM</p>
+                      <h1 className='text-2xl self-center'>End:</h1>
+                      <p className='text-xl flex'>11:15 PM</p>
                     </div>
                   </div>
                   <div>

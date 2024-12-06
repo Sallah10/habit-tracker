@@ -14,7 +14,7 @@ const dashboard = () => {
           <div className='text-white flex flex-col justify-center items-center gap-4'>
             <a href="/dashboard/winddown"><h1 className='text-2xl'> Wind Down</h1><small className='items-center justify-center flex'>off</small></a>
             <a href="/dashboard/focus"><h1 className='text-2xl'> Focus Mode</h1> <small className='items-center justify-center flex'>off</small></a>
-            <a href="/dashboard/usedapp"><h1 className='text-2xl'> Most Used Apps</h1></a>
+            <a href="/dashboard/mostusedapp"><h1 className='text-2xl'> Most Used Apps</h1></a>
           </div>
         </div>
         <Component/>

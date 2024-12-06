@@ -23,7 +23,7 @@ const Focus = () => {
     <>
       <section className='general'>
         <Hero/>
-        <div className='bg-[#D9D9D9] rounded-lg gap-10 flex flex-col px-4 py-6 mb-10'>
+        <div className='bg-[#D9D9D9] rounded-lg gap-10 flex flex-col px-4 py-6 mb-10 self-center'>
           <div className='flex justify-between items-center'>
             <h1 className='text-2xl'> Focus Mode </h1>
             <Switch
@@ -49,7 +49,7 @@ const Focus = () => {
                     <Image src={icon5} alt='focusIcons'/>
                     <Image src={icon6} alt='focusIcons'/>
                     <Image src={icon7} alt='focusIcons'/>
-                    <Image src={icon5} alt='focusIcons' className='md:none lg:none'/>
+                    <Image src={icon5} alt='focusIcons' className='flex md:hidden lg:hidden'/>
                   </div>
                   <h1 className='text-xl text-center flex justify-center items-center'> Pause Distracting apps when you need time to focus</h1>
                  </div>
