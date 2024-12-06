@@ -15,8 +15,8 @@ const used = () => {
         <Hero/>
         <div className='bg-[#D9D9D9] rounded-lg flex flex-col gap-4 px-4 py-6 mb-10'>
           <h1 className='text-2xl self-center flex '> Most Used Apps:</h1>
-          <div className='gap-4 grid-cols-2 grid lg:grid-cols-3 md:grid-cols-2'>
-            <div className='flex flex-col gap-4 justify-center'>
+          <div className='gap-4 grid-cols-1 items-center grid lg:grid-cols-3 md:grid-cols-2'>
+            <div className='flex flex-col gap-4 pb-3 justify-center border-b-4 border-gray-900'>
               <div className='socials'>
                 <Image src={icon0} alt='Facebook' className='m-2 bg-black rounded-sm'/>
                 <div className='text-black'>
@@ -53,7 +53,7 @@ const used = () => {
                 </div>
               </div>
             </div>
-            <div className='flex flex-col gap-4 justify-center'>
+            <div className='flex flex-col gap-4 justify-center pb-3 border-b-4 border-gray-900'>
               <div className='socials'>
                 <Image src={icon0} alt='Facebook' className='m-2 bg-black rounded-sm'/>
                 <div className='text-black'>
@@ -90,7 +90,7 @@ const used = () => {
                 </div>
               </div>
             </div>
-            <div className='flex flex-col gap-4 justify-center'>
+            <div className='flex flex-col gap-4 justify-center pb-3 border-b-4 border-gray-900'>
               <div className='socials'>
                 <Image src={icon0} alt='Facebook' className='m-2 bg-black rounded-sm'/>
                 <div className='text-black'>
