@@ -18,12 +18,12 @@ const nav = () => {
         <div className='flex justify-between p-10'>
           {/* logos */}
           <Image src={logo} alt='logo' width={100} height={100}/>
-          <Image src={openmenu} alt='open-menu' width={26} height={26} onClick={toogleClick}/>
+          <Image src={openmenu} alt='open-menu' width={26} height={26} onClick={toogleClick} className={navClick ? 'hidden w-0': 'flex'}/>
         </div>
-       {!setNavClick && 
-        <div className='flex flex-col h-[100vh]'>
-            <Image src={closemenu} alt='close-menu' width={26} height={26}/>
-            <div className='flex gap-8'>
+       {navClick && 
+        <div className='flex flex-col  items-end pr-8 gap-4'>
+            <Image src={closemenu} alt='close-menu' width={26} height={26} onClick={toogleClick}/>
+            <div className='flex gap-8 flex-col'>
               <a href="">Home</a>
               <a href="">Dashboard</a>
               <a href="">Logout</a>
