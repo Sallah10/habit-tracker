@@ -15,20 +15,25 @@ const nav = () => {
   return (
     <>
       <nav className='bg-[#26252F]  text-white'>
-        <div className='flex justify-between p-10'>
+        <div className='flex justify-between items-start px-10 py-8'>
           {/* logos */}
           <Image src={logo} alt='logo' width={100} height={100}/>
-          <Image src={openmenu} alt='open-menu' width={26} height={26} onClick={toogleClick} className={navClick ? 'hidden w-0': 'flex'}/>
+          <Image src={openmenu} alt='open-menu' width={26} height={26} onClick={toogleClick} className={navClick ? 'hidden w-0': 'flex md:hidden'}/>
+          <div className='hidden md:flex gap-8 items-center hover:to-blue-300'>
+            <a href="">Home</a>
+            <a href="">Dashboard</a>
+            <a href="">Logout</a>
+          </div>
+          {navClick && 
+          <div className='flex flex-col  items-end pr-8 gap-4'>
+              <Image src={closemenu} alt='close-menu' width={26} height={26} onClick={toogleClick}/>
+              <div className='flex gap-8 flex-col'>
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/login">Logout</a>
+              </div>
+          </div> }
         </div>
-       {navClick && 
-        <div className='flex flex-col  items-end pr-8 gap-4'>
-            <Image src={closemenu} alt='close-menu' width={26} height={26} onClick={toogleClick}/>
-            <div className='flex gap-8 flex-col'>
-              <a href="">Home</a>
-              <a href="">Dashboard</a>
-              <a href="">Logout</a>
-            </div>
-        </div> }
       </nav>
     </>
   )
