@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import bgImage from "/app/assets/BG Habit 2.png"
 import { Button } from "@/components/ui/button";

@@ -18,9 +18,9 @@ const signup = () => {
             <form>
               <div className="grid w-full items-center gap-14">
                 <div className="flex flex-col space-y-1.5 gap-4">
-                  <Input id="name" placeholder="User" className='bg-[#D9D9D9] text-center'/>
-                  <Input id="name" placeholder="Password" className='bg-[#D9D9D9] text-center'/>
-                  <Input id="name" placeholder="Confirm Password" className='bg-[#D9D9D9] text-center'/>
+                  <Input id="name" placeholder="User" className='bg-[#D9D9D9] text-center shadow-2xl'/>
+                  <Input id="name" placeholder="Password" className='bg-[#D9D9D9] text-center shadow-2xl'/>
+                  <Input id="name" placeholder="Confirm Password" className='bg-[#D9D9D9] text-center shadow-2xl'/>
                 </div>
                 <Button>Sign Up</Button>
               </div>
