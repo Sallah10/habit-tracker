@@ -1,26 +1,27 @@
 import React from 'react'
+import Image from 'next/image'
+import "./globals.css";
 
 const nav = () => {
   return (
     <div>
+         {/* <input type="checkbox" id="menu">    <input type="checkbox" id="menu">*/}
          <nav>
-            <img src="assets/images/logo.svg" alt="">
-            <input type="checkbox" id="menu">
-            <label for="menu" class="open-menu-icon"> <img src="assets/images/menu.svg" alt="open-menu"> </label>
-            </input>
-            {/* <!-- <div class="nav-links">
+         
+            <label htmlFor="menu" className="open-menu-icon"> <Image src="/assets/menu.svg" alt="open-menu" width={100} height={100}/> </label>
+
+            <div className="nav-links">
                 <ul>
                 <li><a href="#">Home</a></li>
-                <li><a href="#">New</a> </li>
-                <li><a href="#">Popular</a> </li>
-                <li><a href="#">Trending</a> </li>
-                <li><a href="#">Categories</a></li> 
+                <li><a href="#">Dashboard</a> </li>
+                <li><a href="#">login</a> </li>
+                <li><a href="#">signup</a> </li>
                 </ul>
-            </div> --> */}
-            <label for="menu" id="overlay"></label>
-            <div class="nav-links">
-            <label for="menu" class="close-menu-icon">
-                <img src="assets/images/close_menu.png" alt="Close-menu-icon">
+            </div>
+            <label htmlFor="menu" id="overlay"></label>
+            <div className="nav-links">
+            <label htmlFor="menu" className="close-menu-icon">
+                <Image src="/assets/close_menu.png" alt="Close-menu-icon" width={100} height={100}/>
             </label>
             
                 <a href="#">Home</a>
