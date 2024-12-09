@@ -19,18 +19,18 @@ const nav = () => {
           {/* logos */}
           <Image src={logo} alt='logo' width={100} height={100}/>
           <Image src={openmenu} alt='open-menu' width={26} height={26} onClick={toogleClick} className={navClick ? 'hidden w-0': 'flex fill-white md:hidden'}/>
-          <div className='hidden md:flex gap-8 items-center hover:text-blue-300'>
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/login">Logout</a>
+          <div className='hidden md:flex gap-8 items-center'>
+            <a href="/" className='hover:text-blue-300'>Home</a>
+            <a href="/dashboard" className='hover:text-blue-300'>Dashboard</a>
+            <a href="/login" className='hover:text-blue-300'>Logout</a>
           </div>
           {navClick && 
           <div className='flex flex-col  items-end p-8 gap-4 bg-[#3d3b50] ml-auto rounded-lg'>
               <Image src={closemenu} alt='close-menu' width={26} height={26} onClick={toogleClick}/>
               <div className='flex gap-8 flex-col'>
-                <a href="/">Home</a>
-                <a href="/dashboard">Dashboard</a>
-                <a href="/login">Logout</a>
+                <a href="/" className='hover:text-blue-300'>Home</a>
+                <a href="/dashboard" className='hover:text-blue-300'>Dashboard</a>
+                <a href="/login" className='hover:text-blue-300'>Logout</a>
               </div>
           </div> }
         </div>
