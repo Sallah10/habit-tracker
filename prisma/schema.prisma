@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("postgresql://sallah:EjDDXRa6cNXdivwwBYtnj0H931huR66S@dpg-ctbgmthu0jms73f9m15g-a.oregon-postgres.render.com/habit_tracker_vgeg")
+  url      = env("DATABASE_URL")
 }
 
 model User {
