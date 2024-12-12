@@ -22,7 +22,7 @@ const signup = () => {
                   <Input id="name" placeholder="Password" className='bg-[#D9D9D9] text-center shadow-2xl'/>
                   <Input id="name" placeholder="Confirm Password" className='bg-[#D9D9D9] text-center shadow-2xl'/>
                 </div>
-                <Button>Sign Up</Button>
+                <Button type="submit">Sign Up</Button>
               </div>
             </form>
           </CardContent>
