@@ -1,68 +1,86 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@next-auth/prisma-adapter"
-import prisma from "@/lib/prisma"  // Your Prisma client
+import NextAuth from "next-auth";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "@/lib/prisma"; // Adjust the import path to your Prisma client
+import bcrypt from "bcryptjs";
 
-const handler = NextAuth({
-  // Where to store user information
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
-  
-  // How people can log in
   providers: [
+    // GitHub Authentication
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID,
+    //   clientSecret: process.env.GITHUB_SECRET,
+    // }),
+    // Google Authentication
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    }),
+    // Credentials (Email/Password) Authentication
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
-      
-      // The credentials object defines what fields are submitted
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
-      
-      // This is where the magic of checking login happens!
       async authorize(credentials) {
-        // Here you'll add your login validation logic
         if (!credentials?.email || !credentials?.password) {
-          return null
+          return null;
         }
 
-        // Find user in your database
+        // Find user by email
         const user = await prisma.user.findUnique({
-          where: { email: credentials.email }
-        })
+          where: { email: credentials.email },
+        });
 
-        // Check if user exists and password is correct
-        // YOU MUST IMPLEMENT PASSWORD HASHING!
-        if (user) {
-          return user
+        if (!user) {
+          return null;
         }
 
-        // If no user found or password incorrect
-        return null
-      }
-    })
-  ],
-  
-  // Custom pages for authentication
-  pages: {
-    signIn: '/login',  // Your custom login page
-  },
-  
-  // Extra security and customization
-  session: {
-    strategy: "jwt"  // How we keep track of logged-in users
-  },
-  
-  // What happens during different auth stages
-  callbacks: {
-    // Modify the session to include user ID
-    async session({ session, token }) {
-      if (token.sub) {
-        session.user.id = token.sub
-      }
-      return session
-    }
-  }
-})
+        // Check password
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
 
-export { handler as GET, handler as POST }
+        if (!isPasswordValid) {
+          return null;
+        }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+        };
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/auth/signin",
+  },
+  callbacks: {
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id;
+        session.user.name = token.name;
+      }
+      return session;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+      }
+      return token;
+    },
+  },
+};
+
+export default NextAuth(authOptions);
