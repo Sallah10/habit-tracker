@@ -17,6 +17,7 @@
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-toggle": "^1.1.0",
     "add": "^2.0.6",
+    "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input": "^1.0.1",
@@ -39,6 +40,7 @@
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
+    "prisma": "^6.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
