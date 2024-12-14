@@ -23,17 +23,17 @@ export const authOptions = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        User: { label: "Email", type: "text", placeholder: "User" },
+        username: { label: "Email", type: "text", placeholder: "User" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.User || !credentials?.password) {
+        if (!credentials?.username || !credentials?.password) {
           return null;
         }
 
         // Find user by email
         const user = await prisma.user.findUnique({
-          where: { email: credentials.User },
+          where: { email: credentials.username },
         });
 
         if (!user) {
@@ -42,7 +42,7 @@ export const authOptions = {
         // Check password
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
-          user.password
+          user.password as string
         );
 
         if (!isPasswordValid) {
