@@ -58,7 +58,7 @@ const Signup = () => {
         <Card className="bg-transparent border-0 self-center">
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="grid w-full items-center gap-10">
+              <div className="grid w-full items-center gap-8">
                 <div className="flex flex-col space-y-1.5 gap-4">
                   <Input 
                     type="text"

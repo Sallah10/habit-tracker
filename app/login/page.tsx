@@ -36,6 +36,14 @@ const Login = () => {
       router.push('/dashboard')
     }
   }
+  
+  const handleGoogleSignIn = async () => {
+    await signIn('google', { 
+      redirect: true,
+      callbackUrl: '/dashboard' 
+    });
+  };
+  
   return (
     <>
       <section className='general'>
@@ -43,7 +51,7 @@ const Login = () => {
         <Card className="bg-transparent border-0 self-center">
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="grid w-full items-center gap-14">
+              <div className="grid w-full items-center gap-6">
                 <div className="flex flex-col space-y-1.5 gap-4">
                   <Input  type="email"
                     value={email}
@@ -59,7 +67,16 @@ const Login = () => {
                     className='bg-[#D9D9D9] text-center text-base'/>
                 </div>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                <Button type="submit"className='text-base'>Login</Button>
+                <Button type="submit"className='text-base  hover:text-gray-400'>Login</Button>
+                <div className="text-white flex justify-center items-center my-0 p-0">
+                  <span className='m-0 p-0'>OR</span>
+                </div>
+                <Button 
+                  onClick={handleGoogleSignIn}
+                  className="m-0 text-base  hover:text-gray-400"
+                >
+                  Sign in with Google
+                </Button>
               </div>
             </form>
           </CardContent>
