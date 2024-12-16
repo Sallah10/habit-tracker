@@ -9,4 +9,12 @@ declare module "next-auth" {
       image?: string;
     }
   }
+
+  interface User {
+    id: string;
+    name?: string | null;
+    email?: string | null;
+    password?: string; // Add this line
+  }
+
 }
