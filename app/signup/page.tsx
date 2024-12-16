@@ -15,13 +15,22 @@ const Signup = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confrimPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
+    
+    if (password !== confrimPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      return;
+    }
     try {
       const response = await fetch('/api/signup', {
         method: 'POST',
@@ -35,11 +44,11 @@ const Signup = () => {
         setError(data.error || 'Signup failed');
         return;
       }
-
       // Redirect to login or automatically sign in
       router.push('/login');
     } catch (err) {
-      setError(err);
+      // "Network error. Please try again. {err}"
+      setError(`${err}`)
     }
 };
   return (
@@ -75,8 +84,13 @@ const Signup = () => {
                     // id="name" 
                     className='bg-[#D9D9D9] text-center shadow-2xl'/>
                   <Input 
-
-                    id="name" placeholder="Confirm Password" className='bg-[#D9D9D9] text-center shadow-2xl'/>
+                    type="password"
+                    value={confrimPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm Password"
+                    required
+                    // id="name"
+                    className='bg-[#D9D9D9] text-center shadow-2xl'/>
                 </div>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
                 <Button type="submit">Sign Up</Button>
