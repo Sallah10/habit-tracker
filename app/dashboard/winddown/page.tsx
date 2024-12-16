@@ -5,7 +5,7 @@ import { Switch } from "@/components/ui/switch"
 import Image from 'next/image'
 import date from "/app/assets/date.png"
 
-const wind = () => {
+const Wind = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [focusMode, setFocusMode] = React.useState(false)
 
@@ -60,4 +60,4 @@ const wind = () => {
   )
 }
 
-export default wind
+export default Wind

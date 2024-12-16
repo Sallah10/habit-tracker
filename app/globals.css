@@ -86,7 +86,7 @@
 }
 @layer components {
   .general {
-    @apply bg-[#26252F] min-h-screen pt-10 px-6 gap-16 flex flex-col;
+    @apply bg-[#26252F] min-h-screen pt-6 px-6 gap-10 flex flex-col;
   }
   .socials {
     @apply flex items-center gap-4;

@@ -7,7 +7,7 @@ import icon3 from "/app/assets/Container Icon-2.png"
 import icon4 from "/app/assets/Container Icon-3.png"
 
 
-const used = () => {
+const Used = () => {
   return (
     <>
       <section className='general p-4'>
@@ -133,4 +133,4 @@ const used = () => {
   )
 }
 
-export default used
+export default Used

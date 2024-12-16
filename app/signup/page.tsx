@@ -51,12 +51,34 @@ const Signup = () => {
       setError(`${err}`)
     }
 };
+const handleOAuthSignUp = async (provider: string) => {
+  try {
+    // Redirect to NextAuth OAuth sign-in
+    window.location.href = `/api/auth/signin/${provider}`;
+  } catch (err) {
+    setError(`OAuth sign-in failed: ${err}`);
+  }
+};
   return (
     <>
       <section className='general'>
         <Hero/>
         <Card className="bg-transparent border-0 self-center">
           <CardContent>
+            <div className="space-y-4 mb-4">
+              <Button 
+                variant="outline" 
+                className="w-full"
+                onClick={() => handleOAuthSignUp('google')}
+              >
+                Continue with Google
+              </Button>
+            </div>
+            <div className="flex items-center justify-between mb-4">
+              <hr className="w-full mr-2" />
+              <span className="text-gray-500">OR</span>
+              <hr className="w-full ml-2" />
+            </div>
             <form onSubmit={handleSubmit}>
               <div className="grid w-full items-center gap-8">
                 <div className="flex flex-col space-y-1.5 gap-4">

@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 
-const dashboard = async () => {
+const Dashboard = async () => {
   const session = await getServerSession(authOptions);
 
   // If no session exists, redirect to login
@@ -34,4 +34,4 @@ const dashboard = async () => {
   )
 }
 
-export default dashboard
+export default Dashboard
