@@ -15,11 +15,13 @@ import { Input } from "@/components/ui/input"
 const login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState('');
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+    setError('');
+
     const result = await signIn('credentials', {
       redirect: false,  // Don't automatically redirect
       email,
@@ -28,7 +30,7 @@ const login = () => {
 
     if (result?.error) {
       // Handle login error
-      console.error("Login failed:", result.error)
+      setError('Invalid email or password');
     } else {
       // Redirect to dashboard or home page
       router.push('/dashboard')
@@ -56,6 +58,7 @@ const login = () => {
                     required
                     className='bg-[#D9D9D9] text-center text-base'/>
                 </div>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
                 <Button type="submit"className='text-base'>Login</Button>
               </div>
             </form>
