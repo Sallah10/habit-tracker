@@ -11,6 +11,8 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import google from "../assets/google.png"
+import Image from 'next/image'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -73,9 +75,9 @@ const Login = () => {
                 </div>
                 <Button 
                   onClick={handleGoogleSignIn}
-                  className="m-0 text-base  hover:text-gray-400"
+                  className="m-0 text-base flex gap-2 hover:text-gray-400"
                 >
-                  Sign in with Google
+                  Sign in with Google <Image src={google} alt="google-icon" width={20} height={20}/>
                 </Button>
               </div>
             </form>
