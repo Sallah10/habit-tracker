@@ -5,7 +5,7 @@ export default withAuth(
   // `withAuth` augments your `Request` with the user's token.
   function middleware(req) {
     // You can add custom logic here
-    console.log('Authenticated request');
+    console.log(`Authenticated request: ${req}`);
   },
   {
     callbacks: {
@@ -22,7 +22,7 @@ export default withAuth(
 export const config = { 
   matcher: [
     '/dashboard/:path*',
-    '/habits/:path*',
-    '/profile/:path*'
+    // '/habits/:path*',
+    // '/profile/:path*'
   ]
 };

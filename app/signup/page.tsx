@@ -22,7 +22,7 @@ const Signup = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
     if (password !== confrimPassword) {
       setError('Passwords do not match');
       return;
@@ -58,7 +58,7 @@ const Signup = () => {
         <Card className="bg-transparent border-0 self-center">
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="grid w-full items-center gap-14">
+              <div className="grid w-full items-center gap-10">
                 <div className="flex flex-col space-y-1.5 gap-4">
                   <Input 
                     type="text"
@@ -92,7 +92,7 @@ const Signup = () => {
                     // id="name"
                     className='bg-[#D9D9D9] text-center shadow-2xl'/>
                 </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={{ color: 'red', margin: 0, display:'flex'}}>{error}</p>}
                 <Button type="submit">Sign Up</Button>
               </div>
             </form>
