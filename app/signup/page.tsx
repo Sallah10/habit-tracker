@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input"
 import Hero from "../hero"
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import google from "../assets/google.png"
+import Image from 'next/image'
 
 
 const Signup = () => {
@@ -68,10 +70,11 @@ const handleOAuthSignUp = async (provider: string) => {
             <div className="space-y-4 mb-4">
               <Button 
                 variant="outline" 
-                className="w-full"
+                className="w-full text-base flex gap-2 hover:text-gray-400"
                 onClick={() => handleOAuthSignUp('google')}
               >
                 Continue with Google
+                <Image src={google} alt="google-icon" width={20} height={20}/>
               </Button>
             </div>
             <div className="flex items-center justify-between mb-4">
