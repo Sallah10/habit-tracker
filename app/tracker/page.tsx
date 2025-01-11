@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -29,7 +30,6 @@ const SmartSocialTracker = () => {
 
         const endTime = new Date();
         const duration = Math.round((endTime - activeSession.startTime) / 1000 / 60); // minutes
-
         try {
             await logSession({
                 platform: activeSession.platform,
