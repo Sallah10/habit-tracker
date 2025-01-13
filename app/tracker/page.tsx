@@ -1,211 +1,168 @@
 "use client"
 import React, { useState } from 'react';
-import { PlusCircle, Clock, Trash2 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Instagram, Twitter, Facebook, Youtube, Clock, Timer, TrendingUp } from "lucide-react";
 
 type SocialPlatform = 'instagram' | 'twitter' | 'facebook' | 'youtube' | 'tiktok' | 'other';
 
-type Mood = 'productive' | 'neutral' | 'distracting';
+type SocialHabit = {
+    id: string,
+    platform: SocialPlatform,
+    timeGoal: number, // in minutes
+    actualTime: number,
+    mood: 'productive' | 'neutral' | 'distracting',
+    notes: string,
+    date: string
+};
 
-interface SocialHabit {
-    id: string;
-    platform: SocialPlatform;
-    timeGoal: number;
-    actualTime: number;
-    mood: Mood;
-    notes: string;
-    date: string;
-}
-
-interface LogEntry {
-    id: string;
-    habitId: string;
-    minutes: number;
-    date: string;
-    mood: Mood;
-    notes: string;
-}
-const HabitTracker = () => {
-    const [habits, setHabits] = useState([]);
+export default function SocialMediaTracker() {
+    const [habits, setHabits] = useState<SocialHabit[]>([]);
     const [newHabit, setNewHabit] = useState({
-        platform: '',
-        targetMinutes: ''
-    });
-    const [logs, setLogs] = useState([]);
-    const [newLog, setNewLog] = useState({
-        habitId: '',
-        date: new Date().toISOString().split('T')[0],
-        minutes: '',
+        platform: 'instagram' as SocialPlatform,
+        timeGoal: 30,
+        actualTime: 0,
+        mood: 'neutral' as 'productive' | 'neutral' | 'distracting',
         notes: ''
     });
 
-    const addHabit = (e) => {
-        e.preventDefault();
-        if (!newHabit.platform || !newHabit.targetMinutes) return;
-
-        setHabits([...habits, {
-            id: Date.now(),
-            platform: newHabit.platform,
-            targetMinutes: parseInt(newHabit.targetMinutes),
-            createdAt: new Date()
-        }]);
-
-        setNewHabit({ platform: '', targetMinutes: '' });
+    const getPlatformIcon = (platform: SocialPlatform) => {
+        switch (platform) {
+            case 'instagram': return <Instagram className="h-5 w-5" />;
+            case 'twitter': return <Twitter className="h-5 w-5" />;
+            case 'facebook': return <Facebook className="h-5 w-5" />;
+            case 'youtube': return <Youtube className="h-5 w-5" />;
+            default: return <Clock className="h-5 w-5" />;
+        }
     };
 
-    const addLog = (e) => {
-        e.preventDefault();
-        if (!newLog.habitId || !newLog.minutes) return;
+    const addSocialHabit = () => {
+        const habit: SocialHabit = {
+            id: Date.now().toString(),
+            ...newHabit,
+            date: new Date().toISOString().split('T')[0]
+        };
 
-        setLogs([...logs, {
-            id: Date.now(),
-            habitId: newLog.habitId,
-            date: newLog.date,
-            minutes: parseInt(newLog.minutes),
-            notes: newLog.notes
-        }]);
-
-        setNewLog({
-            ...newLog,
-            minutes: '',
+        setHabits([...habits, habit]);
+        setNewHabit({
+            platform: 'instagram',
+            timeGoal: 30,
+            actualTime: 0,
+            mood: 'neutral',
             notes: ''
         });
     };
 
-    const deleteHabit = (habitId) => {
-        setHabits(habits.filter(habit => habit.id !== habitId));
-        setLogs(logs.filter(log => log.habitId !== habitId));
+    const getMoodColor = (mood: string) => {
+        switch (mood) {
+            case 'productive': return 'text-green-500';
+            case 'distracting': return 'text-red-500';
+            default: return 'text-gray-500';
+        }
     };
 
     return (
         <div className="max-w-4xl mx-auto p-4 space-y-6">
-            {/* Add New Habit Form */}
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <PlusCircle className="w-5 h-5" />
-                        Add New Social Media Habit
-                    </CardTitle>
+                    <CardTitle>Track Social Media Usage</CardTitle>
                 </CardHeader>
-                <CardContent>
-                    <form onSubmit={addHabit} className="space-y-4">
-                        <div className="flex gap-4">
-                            <input
-                                type="text"
-                                placeholder="Social Media Platform"
-                                className="flex-1 p-2 border rounded"
-                                value={newHabit.platform}
-                                onChange={(e) => setNewHabit({ ...newHabit, platform: e.target.value })}
-                            />
-                            <input
-                                type="number"
-                                placeholder="Daily Target (minutes)"
-                                className="w-48 p-2 border rounded"
-                                value={newHabit.targetMinutes}
-                                onChange={(e) => setNewHabit({ ...newHabit, targetMinutes: e.target.value })}
-                            />
-                            <button
-                                type="submit"
-                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                            >
-                                Add Habit
-                            </button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
-
-            {/* Log Time Form */}
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                        <Clock className="w-5 h-5" />
-                        Log Time Spent
-                    </CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={addLog} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <select
-                                className="p-2 border rounded"
-                                value={newLog.habitId}
-                                onChange={(e) => setNewLog({ ...newLog, habitId: e.target.value })}
-                            >
-                                <option value="">Select Platform</option>
-                                {habits.map(habit => (
-                                    <option key={habit.id} value={habit.id}>
-                                        {habit.platform}
-                                    </option>
-                                ))}
-                            </select>
-                            <input
-                                type="date"
-                                className="p-2 border rounded"
-                                value={newLog.date}
-                                onChange={(e) => setNewLog({ ...newLog, date: e.target.value })}
-                            />
-                            <input
-                                type="number"
-                                placeholder="Minutes Spent"
-                                className="p-2 border rounded"
-                                value={newLog.minutes}
-                                onChange={(e) => setNewLog({ ...newLog, minutes: e.target.value })}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Notes (optional)"
-                                className="p-2 border rounded"
-                                value={newLog.notes}
-                                onChange={(e) => setNewLog({ ...newLog, notes: e.target.value })}
-                            />
-                        </div>
-                        <button
-                            type="submit"
-                            className="w-full px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                <CardContent className="space-y-4">
+                    <div className="flex items-center space-x-4">
+                        <Select
+                            value={newHabit.platform}
+                            onValueChange={(value: SocialPlatform) =>
+                                setNewHabit({ ...newHabit, platform: value })}
                         >
-                            Log Time
-                        </button>
-                    </form>
-                </CardContent>
-            </Card>
+                            <SelectTrigger className="w-[200px]">
+                                <SelectValue placeholder="Select platform" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="instagram">Instagram</SelectItem>
+                                <SelectItem value="twitter">Twitter</SelectItem>
+                                <SelectItem value="facebook">Facebook</SelectItem>
+                                <SelectItem value="youtube">YouTube</SelectItem>
+                                <SelectItem value="tiktok">TikTok</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                        </Select>
 
-            {/* Habits List */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Your Habits</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="space-y-4">
-                        {habits.map(habit => {
-                            const todayLogs = logs.filter(log =>
-                                log.habitId === habit.id &&
-                                log.date === new Date().toISOString().split('T')[0]
-                            );
-                            const todayMinutes = todayLogs.reduce((sum, log) => sum + log.minutes, 0);
-
-                            return (
-                                <div key={habit.id} className="flex items-center justify-between p-4 border rounded">
-                                    <div>
-                                        <h3 className="font-semibold">{habit.platform}</h3>
-                                        <p className="text-sm text-gray-600">
-                                            Target: {habit.targetMinutes} minutes/day |
-                                            Today: {todayMinutes} minutes
-                                        </p>
-                                    </div>
-                                    <button
-                                        onClick={() => deleteHabit(habit.id)}
-                                        className="p-2 text-red-500 hover:text-red-600"
-                                    >
-                                        <Trash2 className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            );
-                        })}
+                        <Input
+                            type="number"
+                            placeholder="Time goal (minutes)"
+                            value={newHabit.timeGoal}
+                            onChange={(e) => setNewHabit({
+                                ...newHabit,
+                                timeGoal: parseInt(e.target.value)
+                            })}
+                            className="w-[150px]"
+                        />
                     </div>
+
+                    <Select
+                        value={newHabit.mood}
+                        onValueChange={(value: 'productive' | 'neutral' | 'distracting') =>
+                            setNewHabit({ ...newHabit, mood: value })}
+                    >
+                        <SelectTrigger>
+                            <SelectValue placeholder="How did it affect your productivity?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="productive">Productive</SelectItem>
+                            <SelectItem value="neutral">Neutral</SelectItem>
+                            <SelectItem value="distracting">Distracting</SelectItem>
+                        </SelectContent>
+                    </Select>
+
+                    <Input
+                        placeholder="Notes (optional)"
+                        value={newHabit.notes}
+                        onChange={(e) => setNewHabit({ ...newHabit, notes: e.target.value })}
+                    />
+
+                    <Button onClick={addSocialHabit} className="w-full">
+                        <Timer className="mr-2 h-4 w-4" />
+                        Log Social Media Time
+                    </Button>
                 </CardContent>
             </Card>
+
+            <div className="space-y-4">
+                {habits.map(habit => (
+                    <Card key={habit.id}>
+                        <CardHeader>
+                            <CardTitle className="flex justify-between items-center">
+                                <div className="flex items-center space-x-2">
+                                    {getPlatformIcon(habit.platform)}
+                                    <span className="capitalize">{habit.platform}</span>
+                                </div>
+                                <span className={getMoodColor(habit.mood)}>
+                                    {habit.mood}
+                                </span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex justify-between items-center">
+                                <div>
+                                    <p className="text-sm text-gray-500">
+                                        Goal: {habit.timeGoal} minutes
+                                    </p>
+                                    <p className="text-sm text-gray-500">
+                                        Actual: {habit.actualTime} minutes
+                                    </p>
+                                </div>
+                                <TrendingUp className={`h-5 w-5 ${habit.actualTime <= habit.timeGoal ? 'text-green-500' : 'text-red-500'
+                                    }`} />
+                            </div>
+                            {habit.notes && (
+                                <p className="text-sm text-gray-500 mt-2">{habit.notes}</p>
+                            )}
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
         </div>
     );
-};
-
-export default HabitTracker;
+}
