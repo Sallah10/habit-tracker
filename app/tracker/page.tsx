@@ -130,6 +130,9 @@ export default function SocialMediaTracker() {
             </Card>
 
             <div className="space-y-4">
+                <CardHeader>
+                    <CardTitle>Your Habits:</CardTitle>
+                </CardHeader>
                 {habits.map(habit => (
                     <Card key={habit.id}>
                         <CardHeader>
