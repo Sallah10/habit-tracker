@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -71,36 +71,42 @@ export default function SocialMediaTracker() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="flex items-center space-x-4">
-                        <Select
-                            value={newHabit.platform}
-                            onValueChange={(value: SocialPlatform) =>
-                                setNewHabit({ ...newHabit, platform: value })}
-                        >
-                            <SelectTrigger className="w-[200px]">
-                                <SelectValue placeholder="Select platform" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="instagram">Instagram</SelectItem>
-                                <SelectItem value="twitter">Twitter</SelectItem>
-                                <SelectItem value="facebook">Facebook</SelectItem>
-                                <SelectItem value="youtube">YouTube</SelectItem>
-                                <SelectItem value="tiktok">TikTok</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                        </Select>
-
-                        <Input
-                            type="number"
-                            placeholder="Time goal (minutes)"
-                            value={newHabit.timeGoal}
-                            onChange={(e) => setNewHabit({
-                                ...newHabit,
-                                timeGoal: parseInt(e.target.value)
-                            })}
-                            className="w-[150px]"
-                        />
+                        <div className='flex flex-col gap-2'>
+                            <CardTitle className="text-sm self-center">Select Platform:</CardTitle>
+                            <Select
+                                value={newHabit.platform}
+                                onValueChange={(value: SocialPlatform) =>
+                                    setNewHabit({ ...newHabit, platform: value })}
+                            >
+                                <SelectTrigger className="w-[150px] md:w-[200px]">
+                                    <SelectValue placeholder="Select platform" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="instagram">Instagram</SelectItem>
+                                    <SelectItem value="twitter">Twitter</SelectItem>
+                                    <SelectItem value="facebook">Facebook</SelectItem>
+                                    <SelectItem value="youtube">YouTube</SelectItem>
+                                    <SelectItem value="tiktok">TikTok</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                            <CardTitle className='text-sm self-center'>Time spent:</CardTitle>
+                            <Input
+                                type="number"
+                                placeholder="Time goal (minutes)"
+                                value={newHabit.timeGoal}
+                                onChange={(e) => setNewHabit({
+                                    ...newHabit,
+                                    timeGoal: parseInt(e.target.value)
+                                })}
+                                className="max-w-[150px] md:w-[150px]"
+                            />
+                        </div>
                     </div>
 
+                    <CardTitle className='text-sm'>Select Mood:</CardTitle>
                     <Select
                         value={newHabit.mood}
                         onValueChange={(value: 'productive' | 'neutral' | 'distracting') =>
@@ -129,9 +135,9 @@ export default function SocialMediaTracker() {
                 </CardContent>
             </Card>
 
-            <div className="space-y-4">
+            <div className="space-y-2">
                 <CardHeader>
-                    <CardTitle>Your Habits:</CardTitle>
+                    <CardTitle className='text-sm'>Your Habits&apos; Log(s):</CardTitle>
                 </CardHeader>
                 {habits.map(habit => (
                     <Card key={habit.id}>
@@ -150,11 +156,14 @@ export default function SocialMediaTracker() {
                             <div className="flex justify-between items-center">
                                 <div>
                                     <p className="text-sm text-gray-500">
+                                        Time Spent: {habit.timeGoal} minutes
+                                    </p>
+                                    {/* <p className="text-sm text-gray-500">
                                         Goal: {habit.timeGoal} minutes
-                                    </p>
-                                    <p className="text-sm text-gray-500">
+                                    </p> */}
+                                    {/* <p className="text-sm text-gray-500">
                                         Actual: {habit.actualTime} minutes
-                                    </p>
+                                    </p> */}
                                 </div>
                                 <TrendingUp className={`h-5 w-5 ${habit.actualTime <= habit.timeGoal ? 'text-green-500' : 'text-red-500'
                                     }`} />
