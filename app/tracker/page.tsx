@@ -352,7 +352,7 @@ const SocialMediaTracker: React.FC = () => {
             <button
               // bg-blue-500
               type="submit"
-              className="flex items-center justify-center w-full p-2 bg-[#26252F]  text-white rounded hover:bg-blue-600"
+              className="flex items-center justify-center w-full p-2 bg-[#545361]  text-white rounded hover:bg-[#7e7c96] "
             >
               <Plus className="w-4 h-4 mr-2" />
               Log Activity
