@@ -5,6 +5,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 
+
+
 const Dashboard = async () => {
   const session = await getServerSession(authOptions);
 
@@ -15,7 +17,7 @@ const Dashboard = async () => {
   return (
     <>
       <section className='general'>
-        <Hero/>
+        <Hero />
         <div className='flex flex-col gap-6 justify-between items-center'>
           <h1 className='text-3xl'>Dashboard</h1>
           <p>Welcome, {session.user.name}</p>
@@ -28,7 +30,7 @@ const Dashboard = async () => {
             <a href="/dashboard/mostusedapp"><h1 className='text-2xl'> Most Used Apps</h1></a>
           </div>
         </div>
-        <Component/>
+        <Component />
       </section>
     </>
   )

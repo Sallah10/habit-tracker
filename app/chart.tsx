@@ -31,7 +31,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+// interface DashboardProps {
+//   chartData: {
+//     dailyData: { name: string; total: number }[];
+//     platformData: { name: string; total: number }[];
+//     activityData: { name: string; value: number }[];
+//   };
+// }
+
 export function Component() {
+  // const Dashboard: React.FC<DashboardProps> = ({ chartData }) =>{
+
+  // }
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>

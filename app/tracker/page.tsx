@@ -183,6 +183,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Plus } from 'lucide-react';
+// import { getDailyUsageData} from '@/utils/chart-data-export';
 
 export interface LogEntry {
   id: number;
@@ -192,6 +193,7 @@ export interface LogEntry {
   mood: Mood;
   activity: ActivityType;
   wasProductiveTime: 'yes' | 'no';
+
 }
 
 type SocialPlatform = 'Instagram' | 'Facebook' | 'Twitter' | 'TikTok' | 'LinkedIn';
@@ -237,11 +239,14 @@ const SocialMediaTracker: React.FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    // const newLogs = 
     setLogs([...logs, { ...formData, id: Date.now() }]);
     setFormData({
       ...formData,
       timeSpent: '',
     });
+
+    // const dailyData = getDailyUsageData(newLogs);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
@@ -251,6 +256,7 @@ const SocialMediaTracker: React.FC = () => {
       [name]: value
     }));
   };
+
 
   // Process data for the chart
   const chartData: ChartDataPoint[] = logs.reduce((acc: ChartDataPoint[], log) => {
