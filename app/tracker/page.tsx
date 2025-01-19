@@ -184,7 +184,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Plus } from 'lucide-react';
 
-interface LogEntry {
+export interface LogEntry {
   id: number;
   date: string;
   platform: SocialPlatform;
@@ -212,6 +212,17 @@ interface FormData {
   wasProductiveTime: 'yes' | 'no';
 }
 
+export function getDailyUsageData(logs: LogEntry[]) {
+  return logs.reduce((acc: { name: string; total: number }[], log) => {
+    const existingDay = acc.find(item => item.name === log.date);
+    if (existingDay) {
+      existingDay.total += Number(log.timeSpent);
+    } else {
+      acc.push({ name: log.date, total: Number(log.timeSpent) });
+    }
+    return acc.sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
+  }, []);
+}
 
 const SocialMediaTracker: React.FC = () => {
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -352,7 +363,7 @@ const SocialMediaTracker: React.FC = () => {
             <button
               // bg-blue-500
               type="submit"
-              className="flex items-center justify-center w-full p-2 bg-[#545361]  text-white rounded hover:bg-[#7e7c96] "
+              className="flex items-center justify-center w-full p-2 bg-[#26252F]  text-white rounded hover:bg-[#7e7c96] "
             >
               <Plus className="w-4 h-4 mr-2" />
               Log Activity
