@@ -11,14 +11,14 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+// const chartData = [
+//   { month: "January", desktop: 186, mobile: 80 },
+//   { month: "February", desktop: 305, mobile: 200 },
+//   { month: "March", desktop: 237, mobile: 120 },
+//   { month: "April", desktop: 73, mobile: 190 },
+//   { month: "May", desktop: 209, mobile: 130 },
+//   { month: "June", desktop: 214, mobile: 140 },
+// ]
 
 const chartConfig = {
   desktop: {
@@ -38,14 +38,24 @@ const chartConfig = {
 //     activityData: { name: string; value: number }[];
 //   };
 // }
-
-export function Component() {
+interface ComponentProps {
+  data: {
+    daily: { name: string; total: number }[];
+    platforms: { name: string; total: number }[];
+  }
+}
+// export function Component()
+export const Component: React.FC<ComponentProps> = ({ data }) => {
   // const Dashboard: React.FC<DashboardProps> = ({ chartData }) =>{
 
   // }
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={chartData}>
+      <BarChart accessibilityLayer data={data.platforms}
+        width={500}
+        height={300}
+        margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+        className="h-72">
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="month"
