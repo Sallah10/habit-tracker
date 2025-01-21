@@ -346,6 +346,7 @@ const SocialMediaTracker: React.FC = () => {
                   className="w-full p-2 border rounded"
                 >
                   <option value="Browsing">Browsing</option>
+                  <option value="Browsing">Surfing</option>
                   <option value="Posting">Posting</option>
                   <option value="Messaging">Messaging</option>
                   <option value="Research">Research</option>
