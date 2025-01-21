@@ -198,7 +198,7 @@ export interface LogEntry {
 
 type SocialPlatform = 'Instagram' | 'Facebook' | 'Twitter' | 'TikTok' | 'LinkedIn';
 type Mood = 'Happy' | 'Neutral' | 'Sad' | 'Anxious';
-type ActivityType = 'Browsing' | 'Posting' | 'Messaging' | 'Research';
+type ActivityType = 'Browsing' | 'Surfing' | 'Posting' | 'Messaging' | 'Research';
 
 interface ChartDataPoint {
   date: string;
@@ -346,7 +346,7 @@ const SocialMediaTracker: React.FC = () => {
                   className="w-full p-2 border rounded"
                 >
                   <option value="Browsing">Browsing</option>
-                  <option value="Browsing">Surfing</option>
+                  <option value="Surfing">Surfing</option>
                   <option value="Posting">Posting</option>
                   <option value="Messaging">Messaging</option>
                   <option value="Research">Research</option>
