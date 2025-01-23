@@ -1,4 +1,4 @@
-import { TrackingData } from '../src/types/tracking';
+import { TrackingData } from '../../types/tracking';
 
 const API_BASE = 'http://localhost:3000/api';
 

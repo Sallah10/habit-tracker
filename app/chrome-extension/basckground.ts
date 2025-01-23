@@ -1,13 +1,18 @@
-import { TrackingData } from '../src/types/tracking';
+import { TrackingData } from '../../types/tracking';
 import { sendTrackingData } from './api';
 
-let startTime: { [key: number]: number } = {};
+const startTime: { [key: number]: number } = {};
 const SOCIAL_DOMAINS = ['facebook.com', 'twitter.com', 'instagram.com'];
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await chrome.tabs.get(activeInfo.tabId);
-  if (tab.url && isSocialMedia(tab.url)) {
-    startTime[tab.id] = Date.now();
+  if (tab.url && tab.id !== undefined) {
+    if (isSocialMedia(tab.url)) {
+      startTime[tab.id] = Date.now();
+    } else if (startTime[tab.id]) {
+      const domain = new URL(tab.url).hostname;
+      await updateTracking(tab.id, domain);
+    }
   }
 });
 
