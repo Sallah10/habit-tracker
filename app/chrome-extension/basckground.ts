@@ -2,7 +2,7 @@ import { TrackingData } from '../../types/tracking';
 import { sendTrackingData } from './api';
 
 const startTime: { [key: number]: number } = {};
-const SOCIAL_DOMAINS = ['facebook.com', 'twitter.com', 'instagram.com'];
+const SOCIAL_DOMAINS = ['facebook.com', 'x.com', 'instagram.com', 'linkedin.com'];
 
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await chrome.tabs.get(activeInfo.tabId);
