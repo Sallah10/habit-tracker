@@ -3,7 +3,7 @@ export interface TrackingData {
     domain: string;
     duration: number;
   }
-  
+  //exporting stats
   export interface DailyStats {
     date: string;
     totalTime: number;
