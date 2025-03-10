@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import bgImage from "/app/assets/BG Habit 2.png"
+import bgImage from "/app/assets/BGHabit2.png"
 import { Button } from "@/components/ui/button";
 import Hero from "./hero"
 
@@ -15,8 +15,8 @@ export default function Home() {
           priority
           className="absolute z-[-1] object-cover w-full h-full"
         />
-        <Hero/>
-        <div  className="mx-auto mt-56 flex self-center">
+        <Hero />
+        <div className="mx-auto mt-56 flex self-center">
           <a href="/login"><Button className="p-8 text-xl md:mb-48"> Get Started</Button></a>
         </div>
       </div>
