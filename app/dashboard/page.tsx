@@ -19,7 +19,7 @@ const Dashboard = async () => {
   // Fetch logs for the current user
   const logs = await prisma.socialMediaLog.findMany({
     where: {
-      userId: session.user.id
+      userId: session.user.id || ""
     },
     orderBy: {
       date: 'asc'
