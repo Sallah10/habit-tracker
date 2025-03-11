@@ -28,23 +28,23 @@ const Dashboard = async () => {
 
   // Transform the data for charts
   const chartData = {
-    daily: logs.reduce((acc: { name: string; total: number }[], log: { date: { toISOString: () => string; }; timeSpent: number; }) => {
-      const date = log.date.toISOString().split('T')[0];
+    daily: logs.reduce((acc: { name: string; total: number }[], log) => {
+      const date = log.logDate.toISOString().split('T')[0]; // Use logDate instead of date
       const existing = acc.find(item => item.name === date);
       if (existing) {
-        existing.total += log.timeSpent;
+        existing.total += log.duration; // Use duration instead of timeSpent
       } else {
-        acc.push({ name: date, total: log.timeSpent });
+        acc.push({ name: date, total: log.duration });
       }
       return acc;
     }, []),
 
-    platforms: logs.reduce((acc: { name: string; total: number }[], log: { platform: string; timeSpent: number; }) => {
-      const existing = acc.find(item => item.name === log.platform);
+    platforms: logs.reduce((acc: { name: string; total: number }[], log) => {
+      const existing = acc.find(item => item.name === log.habit?.platform); // Ensure habit exists
       if (existing) {
-        existing.total += log.timeSpent;
+        existing.total += log.duration;
       } else {
-        acc.push({ name: log.platform, total: log.timeSpent });
+        acc.push({ name: log.habit?.platform || "Unknown", total: log.duration });
       }
       return acc;
     }, [])
