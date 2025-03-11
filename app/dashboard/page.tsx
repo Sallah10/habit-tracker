@@ -22,7 +22,7 @@ const Dashboard = async () => {
       id: session.user.id || ""
     },
     orderBy: {
-      date: 'asc'
+      logDate: 'asc'
     }
   });
 
