@@ -55,7 +55,7 @@ const Dashboard = async () => {
   };
 
   // Calculate total time spent
-  const totalMinutes = logs.reduce((sum: number, log: { timeSpent: number }) => sum + log.timeSpent, 0);
+  const totalMinutes = logs.reduce((sum: number, log) => sum + log.duration, 0);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
 
