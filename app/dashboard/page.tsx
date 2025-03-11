@@ -21,6 +21,9 @@ const Dashboard = async () => {
     where: {
       id: session.user.id || ""
     },
+    include: {
+      habit: true, // Fetch related habit data
+    },
     orderBy: {
       logDate: 'asc'
     }
@@ -40,11 +43,12 @@ const Dashboard = async () => {
     }, []),
 
     platforms: logs.reduce((acc: { name: string; total: number }[], log) => {
-      const existing = acc.find(item => item.name === log.habit?.platform); // Ensure habit exists
+      const platformName = log.habit?.platform || "Unknown"; // Ensure platform exists
+      const existing = acc.find(item => item.name === platformName);
       if (existing) {
         existing.total += log.duration;
       } else {
-        acc.push({ name: log.habit?.platform || "Unknown", total: log.duration });
+        acc.push({ name: platformName, total: log.duration });
       }
       return acc;
     }, [])
