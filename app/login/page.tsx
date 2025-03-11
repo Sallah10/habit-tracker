@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import google from "../assets/google.png"
+import google from "/app/assets/google.png"
 import Image from 'next/image'
 
 const Login = () => {

@@ -3,7 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Plus } from 'lucide-react';
-// import { getDailyUsageData} from '@/utils/chart-data-export';
+// import { getDailyUsageData} from '@/lib/utils';
 
 export interface LogEntry {
   id: number;
@@ -36,17 +36,6 @@ interface FormData {
   wasProductiveTime: 'yes' | 'no';
 }
 
-export function getDailyUsageData(logs: LogEntry[]) {
-  return logs.reduce((acc: { name: string; total: number }[], log) => {
-    const existingDay = acc.find(item => item.name === log.date);
-    if (existingDay) {
-      existingDay.total += Number(log.timeSpent);
-    } else {
-      acc.push({ name: log.date, total: Number(log.timeSpent) });
-    }
-    return acc.sort((a, b) => new Date(a.name).getTime() - new Date(b.name).getTime());
-  }, []);
-}
 
 const SocialMediaTracker: React.FC = () => {
   const [logs, setLogs] = useState<LogEntry[]>([]);

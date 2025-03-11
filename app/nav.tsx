@@ -3,8 +3,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import "./globals.css";
 import logo from "./assets/HabiTapp.png"
-import closemenu from "./assets/close_menu.png"
-import openmenu from "./assets/icon-menu.svg"
+import closemenu from "/app/assets/close_menu.png"
+import openmenu from "/app/assets/icon-menu.svg"
 import Link from 'next/link';
 
 const Nav = () => {
@@ -34,7 +34,7 @@ const Nav = () => {
                 <a href="/login" className='hover:text-blue-300'>Logout</a>
               </div>
             </div>}
-             {/* ml-auto  items-end  h-full*/}
+          {/* ml-auto  items-end  h-full*/}
           {/* {navClick &&
             <div className='fixed left-0 top-0 w-[60%] flex flex-col p-8 gap-4 bg-[#3d3b50] rounded-lg uppercase'>
               <Image src={closemenu} alt='close-menu' width={26} height={26} onClick={toogleClick} />
