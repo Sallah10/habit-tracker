@@ -1,6 +1,6 @@
 "use client";
 import React from 'react'
-import Hero from "../hero"
+import Hero from "../../hero"
 import { signIn } from "next-auth/react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"

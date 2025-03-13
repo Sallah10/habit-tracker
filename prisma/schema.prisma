@@ -10,7 +10,7 @@ model User {
   id            String    @id @default(uuid())
   email         String    @unique
   name          String?
-  password      String?   @unique
+  password      String?   // removed @unique
   emailVerified DateTime? // Required for email/password auth
   image         String?   // Optional: Profile picture URL
   habits        SocialMediaHabit[]

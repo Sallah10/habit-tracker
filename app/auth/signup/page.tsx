@@ -6,7 +6,7 @@ import {
   CardFooter,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import Hero from "../hero"
+import Hero from "../../hero"
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import google from "/app/assets/google.png"

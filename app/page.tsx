@@ -17,7 +17,7 @@ export default function Home() {
         />
         <Hero />
         <div className="mx-auto mt-56 flex self-center">
-          <a href="/login"><Button className="p-8 text-xl md:mb-48"> Get Started</Button></a>
+          <a href="/auth/login"><Button className="p-8 text-xl md:mb-48"> Get Started</Button></a>
         </div>
       </div>
     </>
