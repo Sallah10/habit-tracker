@@ -47,6 +47,28 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
+    async signIn({ user, account, profile }) {
+      // Only handle Google OAuth sign-in
+      if (account?.provider === "google") {
+        // Check if the user already exists in the database
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+        });
+
+        // If the user doesn't exist, create a new user
+        if (!existingUser) {
+          await prisma.user.create({
+            data: {
+              email: user.email!,
+              name: user.name || profile?.name || "Unknown",
+              // Add other fields if needed
+            },
+          });
+        }
+      }
+
+      return true; // Allow sign-in
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -60,17 +82,13 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-    // if (session.user && token?.id) {
-      //   session.user = {
-      //     ...session.user,
-      //     id: token.id as string
-      //   };
+
   session: {
     strategy: "jwt",
   },
 
   pages: {
-    signIn: "/auth/signin", // Custom login page
+    signIn: "/auth/login", // Custom login page
   },
 
   secret: process.env.NEXTAUTH_SECRET,

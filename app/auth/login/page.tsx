@@ -83,7 +83,7 @@ const Login = () => {
             </form>
           </CardContent>
           <CardFooter className='text-white'>
-            Don&apos;t have an account? <a href="/signup" className='ml-1'>Sign Up Here</a>
+            Don&apos;t have an account? <a href="/auth/signup" className='ml-1'>Sign Up Here</a>
           </CardFooter>
         </Card>
       </section>
