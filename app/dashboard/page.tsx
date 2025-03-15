@@ -69,6 +69,7 @@ const Dashboard = async () => {
           <div className='flex border-8 rounded-full items-center justify-center h-[300px] w-[300px] text-lg text-white'>
             <h1>{hours}h {minutes}m</h1>
           </div>
+          <a href="tracker" className='text-3xl'>Tracker</a>
           <div className='text-white flex flex-col justify-center items-center gap-4'>
             <a href="/dashboard/winddown">
               <h1 className='text-2xl'> Wind Down</h1>
