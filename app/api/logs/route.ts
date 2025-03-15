@@ -1,16 +1,8 @@
 // app/api/logs/route.ts
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   const { logDate, platform, duration, mood, activity, wasProductive, userId } = await req.json();
 
   try {
@@ -24,12 +16,17 @@ export async function POST(req: Request) {
         habit: {
           connectOrCreate: {
             where: {
-              platform_userId: { // Make sure this key exists
+              platform_userId: { // Use the composite unique key
                 platform,
-                userId
-              }
-            },            
-            create: { platform, userId },
+                userId,
+              },
+            },
+            create: {
+              platform,
+              userId,
+              icon: '', // Add a default icon or leave it empty
+              goalDuration: 0, // Add a default goal duration or leave it as 0
+            },
           },
         },
       },
