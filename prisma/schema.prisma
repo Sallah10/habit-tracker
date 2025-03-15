@@ -72,7 +72,10 @@ model SocialMediaLog {
   habit     SocialMediaHabit @relation(fields: [habitId], references: [id])
   logDate   DateTime
   duration  Int      // Time spent in minutes
-  note      String?  // Optional notes
+  note      String?  // Optional 
+  mood      String?
+  activity  String?
+  wasProductive   String?
   status    String?  // Optional: "completed" or "missed"
   createdAt DateTime @default(now())
 }

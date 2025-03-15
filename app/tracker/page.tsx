@@ -3,83 +3,101 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Plus } from 'lucide-react';
-// import { getDailyUsageData} from '@/lib/utils';
+import { useSession } from 'next-auth/react';
 
 export interface LogEntry {
-  id: number;
-  date: string;
-  // name: string;
-  // total: number;
+  id: string;
+  logDate: string;
   platform: SocialPlatform;
-  timeSpent: string;
+  duration: number;
   mood: Mood;
   activity: ActivityType;
-  wasProductiveTime: 'yes' | 'no';
-
+  wasProductive: boolean;
 }
 
 type SocialPlatform = 'Instagram' | 'Facebook' | 'Twitter' | 'TikTok' | 'LinkedIn';
 type Mood = 'Happy' | 'Neutral' | 'Sad' | 'Anxious';
 type ActivityType = 'Browsing' | 'Surfing' | 'Posting' | 'Messaging' | 'Research';
 
-interface ChartDataPoint {
-  date: string;
-  timeSpent: number;
-}
-
 interface FormData {
-  date: string;
+  logDate: string;
   platform: SocialPlatform;
-  timeSpent: string;
+  duration: string;
   mood: Mood;
   activity: ActivityType;
-  wasProductiveTime: 'yes' | 'no';
+  wasProductive: string;
 }
 
-
 const SocialMediaTracker: React.FC = () => {
+  const { data: session } = useSession();
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [formData, setFormData] = useState<FormData>({
-    date: new Date().toISOString().split('T')[0],
+    logDate: new Date().toISOString().split('T')[0],
     platform: 'Instagram',
-    timeSpent: '',
+    duration: '',
     mood: 'Neutral',
     activity: 'Browsing',
-    wasProductiveTime: 'no'
+    wasProductive: 'yes',
   });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    // const newLogs = 
-    setLogs([...logs, { ...formData, id: Date.now() }]);
-    setFormData({
-      ...formData,
-      timeSpent: '',
-    });
 
-    // const dailyData = getDailyUsageData(newLogs);
+    if (!session?.user?.id) {
+      alert('You must be logged in to log activity.');
+      return;
+    }
+
+    const newLog = {
+      ...formData,
+      duration: parseInt(formData.duration),
+      wasProductive: formData.wasProductive === 'yes',
+    };
+
+    try {
+      const response = await fetch('/api/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...newLog,
+          userId: session.user.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save log');
+      }
+
+      const savedLog = await response.json();
+      setLogs([...logs, savedLog]);
+      setFormData({
+        ...formData,
+        duration: '',
+      });
+    } catch (error) {
+      console.error('Error saving log:', error);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-
   // Process data for the chart
-  const chartData: ChartDataPoint[] = logs.reduce((acc: ChartDataPoint[], log) => {
-    const date = log.date;
-    const existing = acc.find(item => item.date === date);
+  const chartData = logs.reduce((acc: { logDate: string; duration: number }[], log) => {
+    const date = log.logDate;
+    const existing = acc.find(item => item.logDate === date);
     if (existing) {
-      existing.timeSpent = Number(existing.timeSpent) + Number(log.timeSpent);
+      existing.duration += log.duration;
     } else {
-      acc.push({ date, timeSpent: Number(log.timeSpent) });
+      acc.push({ logDate: date, duration: log.duration });
     }
     return acc;
-  }, []).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  }, []).sort((a, b) => new Date(a.logDate).getTime() - new Date(b.logDate).getTime());
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
@@ -96,7 +114,7 @@ const SocialMediaTracker: React.FC = () => {
                 <input
                   type="date"
                   name="date"
-                  value={formData.date}
+                  value={formData.logDate}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   required
@@ -125,7 +143,7 @@ const SocialMediaTracker: React.FC = () => {
                 <input
                   type="number"
                   name="timeSpent"
-                  value={formData.timeSpent}
+                  value={formData.duration}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                   min="0"
@@ -168,7 +186,7 @@ const SocialMediaTracker: React.FC = () => {
                 <label className="block text-sm font-medium mb-1">Was it productive time?</label>
                 <select
                   name="wasProductiveTime"
-                  value={formData.wasProductiveTime}
+                  value={formData.wasProductive}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                 >
@@ -240,12 +258,12 @@ const SocialMediaTracker: React.FC = () => {
                 <tbody>
                   {logs.map(log => (
                     <tr key={log.id} className="border-t">
-                      <td className="p-2">{log.date}</td>
+                      <td className="p-2">{log.logDate}</td>
                       <td className="p-2">{log.platform}</td>
-                      <td className="p-2">{log.timeSpent}</td>
+                      <td className="p-2">{log.duration}</td>
                       <td className="p-2">{log.mood}</td>
                       <td className="p-2">{log.activity}</td>
-                      <td className="p-2">{log.wasProductiveTime}</td>
+                      <td className="p-2">{log.wasProductive}</td>
                     </tr>
                   ))}
                 </tbody>
