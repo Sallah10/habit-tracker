@@ -59,15 +59,15 @@ const Dashboard = async () => {
 
   return (
     <>
-      <section className='general'>
+      <section className='general text-white'>
         <Hero />
         <div className='flex flex-col gap-6 justify-between items-center'>
-          <h1 className='text-3xl'>Dashboard</h1>
+          <h1 className='text-3xl '>Dashboard</h1>
           <p>Welcome, {session.user.name}</p>
+          <a href="tracker" className='text-3xl'>Tracker</a>
           <div className='flex border-8 rounded-full items-center justify-center h-[300px] w-[300px] text-lg text-white'>
             <h1>{hours}h {minutes}m</h1>
           </div>
-          <a href="tracker" className='text-3xl'>Tracker</a>
           <div className='text-white flex flex-col justify-center items-center gap-4'>
             <a href="/dashboard/winddown">
               <h1 className='text-2xl'> Wind Down</h1>
