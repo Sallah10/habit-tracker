@@ -23,10 +23,12 @@ export async function POST(req: Request) {
         wasProductive,
         habit: {
           connectOrCreate: {
-            platform_userId: {
-              platform,
-              userId
-            },
+            where: {
+              platform_userId: { // Make sure this key exists
+                platform,
+                userId
+              }
+            },            
             create: { platform, userId },
           },
         },

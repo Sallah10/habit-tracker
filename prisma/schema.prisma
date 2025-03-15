@@ -65,7 +65,7 @@ model SocialMediaHabit {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-    @@unique([platform, userId]) // Ensures platform-user pair is unique
+  @@unique([platform, userId]) // Ensures platform-user pair is unique
 }
 
 model SocialMediaLog {
