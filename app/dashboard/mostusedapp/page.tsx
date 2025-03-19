@@ -15,7 +15,7 @@ const Used = async () => {
 
   // Redirect to login if no session exists
   if (!session) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // Fetch logs for the current user

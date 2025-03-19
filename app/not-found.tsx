@@ -1,13 +1,15 @@
-// app/not-found.tsx
-"use client";
-import Link from 'next/link';
+"use client"; // Mark this as a Client Component
+
+import { useRouter } from "next/navigation";
 
 export default function NotFound() {
+    const router = useRouter();
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-[70vh]">
-            <h2 className="text-2xl font-bold mb-4">Page Not Found</h2>
-            <p>Could not find the requested resource</p>
-            <Link href="/" className="mt-4 underline">Return Home</Link>
+        <div>
+            <h1>404 - Page Not Found</h1>
+            <p>The page you are looking for does not exist.</p>
+            <button onClick={() => router.push("/")}>Go to Home</button>
         </div>
     );
 }

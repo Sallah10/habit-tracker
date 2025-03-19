@@ -14,7 +14,7 @@ const Dashboard = async () => {
 
   // If no session exists, redirect to login
   if (!session) {
-    redirect('/login');
+    redirect('/auth/login');
   }
 
   // Fetch logs for the current user
