@@ -11,15 +11,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-// const chartData = [
-//   { month: "January", desktop: 186, mobile: 80 },
-//   { month: "February", desktop: 305, mobile: 200 },
-//   { month: "March", desktop: 237, mobile: 120 },
-//   { month: "April", desktop: 73, mobile: 190 },
-//   { month: "May", desktop: 209, mobile: 130 },
-//   { month: "June", desktop: 214, mobile: 140 },
-// ]
-
 const chartConfig = {
   desktop: {
     label: "Desktop",
@@ -31,24 +22,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-// interface DashboardProps {
-//   chartData: {
-//     dailyData: { name: string; total: number }[];
-//     platformData: { name: string; total: number }[];
-//     activityData: { name: string; value: number }[];
-//   };
-// }
 interface ComponentProps {
   data: {
     daily: { name: string; total: number }[];
     platforms: { name: string; total: number }[];
   }
 }
-// export function Component()
-export const Component: React.FC<ComponentProps> = ({ data }) => {
-  // const Dashboard: React.FC<DashboardProps> = ({ chartData }) =>{
 
-  // }
+export const Component: React.FC<ComponentProps> = ({ data }) => {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={data.platforms}
