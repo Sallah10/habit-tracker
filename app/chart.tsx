@@ -22,17 +22,34 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-interface ComponentProps {
-  data: {
-    daily: { name: string; total: number }[];
-    platforms: { name: string; total: number }[];
-  }
-}
+import { ChartData } from "@/types/chart"
 
-export const Component: React.FC<ComponentProps> = ({ data }) => {
+// interface ComponentProps {
+//   data: {
+//     daily: { name: string; total: number }[];
+//     platforms: { name: string; total: number }[];
+//   }
+// }
+
+export const Component: React.FC<{ data: ChartData }> = ({ data }) => {
+  // app/components/ChartComponent.tsx
+  if (!data.platforms || data.platforms.length === 0) {
+    return (
+      <div className="text-white p-4 text-center">
+        No platform data available
+      </div>
+    );
+  }
+  const platformChartData = data.platforms.map(platform => ({
+    name: platform.name,
+    desktop: platform.total * 0.6, // Example distribution
+    mobile: platform.total * 0.4,  // Example distribution
+    total: platform.total
+  }));
+
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={data.platforms}
+      <BarChart accessibilityLayer data={platformChartData}
         width={500}
         height={300}
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
