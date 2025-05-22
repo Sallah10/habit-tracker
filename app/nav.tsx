@@ -107,6 +107,7 @@ import closemenu from "/app/assets/close_menu.png";
 import openmenu from "/app/assets/icon-menu.svg";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+// import { link } from "fs";
 
 const Nav = () => {
   const [navClick, setNavClick] = useState(false);
@@ -151,9 +152,11 @@ const Nav = () => {
               Dashboard
             </Link>
             {session ? (
-              <button onClick={handleLogout} className="hover:text-blue-300">
-                Logout
-              </button>
+              <Link href="/login">
+                <button onClick={handleLogout} className="hover:text-blue-300">
+                  Logout
+                </button>
+              </Link>
             ) : (
               <Link href="/login" className="hover:text-blue-300">
                 Login

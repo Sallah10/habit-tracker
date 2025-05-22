@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import { Component } from "../chart";
 import { ChartData } from "@/types/chart";
+// import Hero from "../hero"
 
 const container = {
   hidden: { opacity: 0 },
@@ -49,6 +50,7 @@ export default function AnimatedDashboard({
       variants={container}
       className='general text-white'
     >
+      {/* <Hero /> */}
       <div className='flex flex-col gap-6 justify-between items-center'>
         <motion.h1 variants={item} className='text-3xl'>Dashboard</motion.h1>
         <motion.p variants={item}>Welcome, {name}</motion.p>

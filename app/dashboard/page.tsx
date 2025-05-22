@@ -1,6 +1,6 @@
 // app/dashboard/page.tsx
 import React from 'react'
-import Hero from "../hero"
+// import Hero from "../hero"
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
@@ -65,7 +65,7 @@ const Dashboard = async () => {
 
   return (
     <>
-      <Hero />
+      {/* <Hero /> */}
       <AnimatedDashboard
         chartData={chartData}
         hours={hours}
