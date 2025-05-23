@@ -145,7 +145,7 @@ const Nav = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex gap-8 items-center">
-            <Link href="/" className="hover:text-blue-300">
+            <Link href="/tracker" className="hover:text-blue-300">
               Home
             </Link>
             <Link href="/dashboard" className="hover:text-blue-300">

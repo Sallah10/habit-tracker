@@ -57,7 +57,7 @@ export default function AnimatedDashboard({
 
         <motion.a
           href="tracker"
-          className='text-3xl'
+          className='text-3xl text-gray-300 underline'
           variants={item}
           whileHover={{
             scale: 1.05,

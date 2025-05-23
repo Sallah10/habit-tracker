@@ -1,6 +1,6 @@
 import React from 'react';
 import Hero from '../../hero';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import icon1 from '/app/assets/ContainerIcon.png';
 import icon2 from '/app/assets/ContainerIcon-1.png';
 import icon3 from '/app/assets/ContainerIcon-2.png';
@@ -9,6 +9,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
+import FocusMode from '../focus/page';
 
 const Used = async () => {
   const session = await getServerSession(authOptions);
@@ -43,6 +44,18 @@ const Used = async () => {
   const totalMinutes = Object.values(platformUsage).reduce((sum, duration) => sum + duration, 0);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
+
+  function getPlatformIcon(platform: string) {
+    const icons: Record<string, StaticImageData> = {
+      'Discord': icon1,
+      'TikTok': icon2,
+      'Twitter': icon3,
+      'Snapchat': icon4,
+      // 'Instagram': icon5,
+      // Add more mappings
+    };
+    return icons[platform] || icons['Discord']; // Default fallback
+  }
 
   return (
     <>
@@ -91,6 +104,14 @@ const Used = async () => {
               {hours}h {minutes}m
             </h1>
           </div>
+        </div>
+        {/* // Add this to your Used component's return: */}
+        <div className='hidden w-0 h-0'>
+          <FocusMode platformData={sortedPlatforms.map(platform => ({
+            platform: platform.platform,
+            duration: platform.duration,
+            icon: getPlatformIcon(platform.platform).src
+          }))} />
         </div>
       </section>
     </>

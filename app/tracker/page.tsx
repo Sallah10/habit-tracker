@@ -22,10 +22,10 @@ type ActivityType = 'Browsing' | 'Surfing' | 'Posting' | 'Messaging' | 'Research
 interface FormData {
   logDate: string;
   platform: SocialPlatform;
-  duration: string;
+  duration: number;
   mood: Mood;
   activity: ActivityType;
-  wasProductive: string;
+  wasProductive: 'yes' | 'no';
 }
 
 const SocialMediaTracker: React.FC = () => {
@@ -34,7 +34,7 @@ const SocialMediaTracker: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({
     logDate: new Date().toISOString().split('T')[0],
     platform: 'Instagram',
-    duration: '',
+    duration: 0,
     mood: 'Neutral',
     activity: 'Browsing',
     wasProductive: 'yes',
@@ -48,9 +48,14 @@ const SocialMediaTracker: React.FC = () => {
       return;
     }
 
+    if (formData.duration <= 0) {
+      alert('Please enter a valid duration');
+      return;
+    }
+
     const newLog = {
       ...formData,
-      duration: parseInt(formData.duration),
+      duration: formData.duration,
       wasProductive: formData.wasProductive === 'yes',
     };
 
@@ -71,8 +76,12 @@ const SocialMediaTracker: React.FC = () => {
       const savedLog = await response.json();
       setLogs([...logs, savedLog]);
       setFormData({
-        ...formData,
-        duration: '',
+        logDate: new Date().toISOString().split('T')[0],
+        platform: 'Instagram',
+        duration: 0, // Reset to default
+        mood: 'Neutral',
+        activity: 'Browsing',
+        wasProductive: 'yes',
       });
     } catch (error) {
       console.error('Error saving log:', error);
@@ -81,9 +90,13 @@ const SocialMediaTracker: React.FC = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const { name, value } = e.target;
+    if (name === 'duration') {
+      if (value && !/^\d+$/.test(value)) return; // Only allow numbers
+    }
+
     setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: name === 'duration' ? Number(value) : value,
     }));
   };
 
@@ -113,7 +126,7 @@ const SocialMediaTracker: React.FC = () => {
                 <label className="block text-sm font-medium mb-1">Date</label>
                 <input
                   type="date"
-                  name="date"
+                  name="logDate"
                   value={formData.logDate}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
@@ -142,7 +155,7 @@ const SocialMediaTracker: React.FC = () => {
                 <label className="block text-sm font-medium mb-1">Time Spent (minutes)</label>
                 <input
                   type="number"
-                  name="timeSpent"
+                  name="duration"
                   value={formData.duration}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
@@ -185,7 +198,7 @@ const SocialMediaTracker: React.FC = () => {
               <div>
                 <label className="block text-sm font-medium mb-1">Was it productive time?</label>
                 <select
-                  name="wasProductiveTime"
+                  name="wasProductive"
                   value={formData.wasProductive}
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
@@ -221,13 +234,13 @@ const SocialMediaTracker: React.FC = () => {
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
+                <XAxis dataKey="logDate" />
                 <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
                 <Tooltip />
                 <Legend />
                 <Line
                   type="monotone"
-                  dataKey="timeSpent"
+                  dataKey="duration"
                   stroke="#8884d8"
                   name="Time Spent (minutes)"
                 />
