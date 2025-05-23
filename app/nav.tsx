@@ -183,16 +183,18 @@ const Nav = () => {
 
           {/* Menu Links */}
           <div className="flex flex-col gap-6 text-2xl">
-            <Link href="/" onClick={toggleClick} className="hover:text-blue-300">
+            <Link href="/tracker" onClick={toggleClick} className="hover:text-blue-300">
               Home
             </Link>
             <Link href="/dashboard" onClick={toggleClick} className="hover:text-blue-300">
               Dashboard
             </Link>
             {session ? (
-              <button onClick={handleLogout} className="hover:text-blue-300">
-                Logout
-              </button>
+              <Link href="/login">
+                <button onClick={handleLogout} className="hover:text-blue-300">
+                  Logout
+                </button>
+              </Link>
             ) : (
               <Link href="/login" onClick={toggleClick} className="hover:text-blue-300">
                 Login
