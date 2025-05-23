@@ -52,7 +52,7 @@ const FocusMode = ({ platformData = [] }: {
   return (
     <>
       <section className='general'>
-        <div className="bg-[#D9D9D9] rounded-lg gap-10 flex flex-col items-center px-4 py-6 mb-6 max-w-[500px] self-center">
+        {/* <div className="bg-[#D9D9D9] rounded-lg gap-10 flex flex-col items-center px-4 py-6 mb-6 max-w-[500px] self-center">
           <div className="flex justify-between w-full items-center">
             <h1 className="text-2xl">Focus Mode</h1>
             <Switch
@@ -60,7 +60,7 @@ const FocusMode = ({ platformData = [] }: {
               onCheckedChange={() => setFocusMode(!focusMode)}
             />
           </div>
-        </div>
+        </div> */}
         <Hero />
         <div className="w-full max-w-4xl mx-auto bg-[#D9D9D9] rounded-lg p-6 mb-10">
           {/* Header with toggle */}
