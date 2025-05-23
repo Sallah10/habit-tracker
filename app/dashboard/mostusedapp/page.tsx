@@ -5,6 +5,10 @@ import icon1 from '/app/assets/ContainerIcon.png';
 import icon2 from '/app/assets/ContainerIcon-1.png';
 import icon3 from '/app/assets/ContainerIcon-2.png';
 import icon4 from '/app/assets/ContainerIcon-3.png';
+import icon5 from '/app/assets/ContainerIcon-5.png';
+import icon6 from '/app/assets/ContainerIcon-6.png';
+import icon7 from '/app/assets/ContainerIcon-7.png';
+import icon8 from '/app/assets/ContainerIcon-8.png';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import { redirect } from 'next/navigation';
@@ -51,7 +55,11 @@ const Used = async () => {
       'TikTok': icon2,
       'Twitter': icon3,
       'Snapchat': icon4,
-      // 'Instagram': icon5,
+      'Instagram': icon5,
+      'Chrome': icon6,
+      'YouTube': icon7,
+      'Facebook': icon8,
+
       // Add more mappings
     };
     return icons[platform] || icons['Discord']; // Default fallback
@@ -78,9 +86,17 @@ const Used = async () => {
                             ? icon2
                             : platform === 'Twitter'
                               ? icon3
-                              : platform === 'snapchat'
+                              : platform === 'Snapchat'
                                 ? icon4
-                                : ''
+                                : platform === 'Instagram'
+                                  ? icon5
+                                  : platform === 'Chrome'
+                                    ? icon6
+                                    : platform === 'Youtube'
+                                      ? icon7
+                                      : platform === 'Facebook'
+                                        ? icon8
+                                        : ''
                       }
                       alt={platform}
                     />
