@@ -14,36 +14,50 @@ export async function POST(req: Request) {
       );
     }
 
+    // Verify user exists first
+    const userExists = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!userExists) {
+      return NextResponse.json(
+        { error: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    // Create the log with string-based wasProductive
     const log = await prisma.socialMediaLog.create({
       data: {
-        logDate: new Date(logDate).toISOString(),
-        duration: parseInt(duration),
+        logDate: new Date(logDate),
+        duration: Number(duration),
         mood,
         activity,
-        wasProductive: (wasProductive === 'true' || wasProductive === true).toString(),
+        wasProductive, // Directly use the string value ('yes'/'no')
         habit: {
           connectOrCreate: {
             where: {
               platform_userId: {
                 platform,
-                userId,
-              },
+                userId
+              }
             },
             create: {
               platform,
-              userId,
-              icon: getDefaultIcon(platform), // Implement this
-              goalDuration: 60, // Default 60 minutes
-            },
-          },
-        },
+              user: { connect: { id: userId } },
+              icon: getDefaultIcon(platform),
+              goalDuration: 60
+            }
+          }
+        }
       },
       include: {
-        habit: true,
-      },
+        habit: true
+      }
     });
 
     return NextResponse.json(log);
+
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json(
@@ -60,9 +74,11 @@ export async function POST(req: Request) {
 
 function getDefaultIcon(platform: string): string {
   const icons: Record<string, string> = {
-    Instagram: '/default/instagram.png',
-    Facebook: '/default/facebook.png',
-    // Add other platforms
+    'Instagram': '/icons/instagram.png',
+    'Facebook': '/icons/facebook.png',
+    'Twitter': '/icons/twitter.png',
+    'TikTok': '/icons/tiktok.png',
+    'LinkedIn': '/icons/linkedin.png'
   };
-  return icons[platform] || '/default/social.png';
+  return icons[platform] || '/icons/default.png';
 }
