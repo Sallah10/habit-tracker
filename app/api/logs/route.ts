@@ -3,20 +3,28 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
 export async function POST(req: Request) {
-  const { logDate, platform, duration, mood, activity, wasProductive, userId } = await req.json();
-
   try {
+    const { logDate, platform, duration, mood, activity, wasProductive, userId } = await req.json();
+
+    // Validate required fields
+    if (!userId || !platform || !logDate) {
+      return NextResponse.json(
+        { error: "Missing required fields (userId, platform, logDate)" },
+        { status: 400 }
+      );
+    }
+
     const log = await prisma.socialMediaLog.create({
       data: {
-        logDate: new Date(logDate),
-        duration,
+        logDate: new Date(logDate).toISOString(),
+        duration: parseInt(duration),
         mood,
         activity,
-        wasProductive,
+        wasProductive: (wasProductive === 'true' || wasProductive === true).toString(),
         habit: {
           connectOrCreate: {
             where: {
-              platform_userId: { // Use the composite unique key
+              platform_userId: {
                 platform,
                 userId,
               },
@@ -24,17 +32,37 @@ export async function POST(req: Request) {
             create: {
               platform,
               userId,
-              icon: '', // Add a default icon or leave it empty
-              goalDuration: 0, // Add a default goal duration or leave it as 0
+              icon: getDefaultIcon(platform), // Implement this
+              goalDuration: 60, // Default 60 minutes
             },
           },
         },
+      },
+      include: {
+        habit: true,
       },
     });
 
     return NextResponse.json(log);
   } catch (error) {
-    console.error('Error creating log:', error);
-    return NextResponse.json({ error: 'Failed to create log' }, { status: 500 });
+    console.error('Database error:', error);
+    return NextResponse.json(
+      { 
+        error: 'Failed to create log',
+        details: process.env.NODE_ENV === 'development' 
+          ? error instanceof Error ? error.message : String(error)
+          : undefined
+      },
+      { status: 500 }
+    );
   }
+}
+
+function getDefaultIcon(platform: string): string {
+  const icons: Record<string, string> = {
+    Instagram: '/default/instagram.png',
+    Facebook: '/default/facebook.png',
+    // Add other platforms
+  };
+  return icons[platform] || '/default/social.png';
 }
