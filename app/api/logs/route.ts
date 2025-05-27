@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   try {
     const { logDate, platform, duration, mood, activity, wasProductive, userId } = await req.json();
 
-    // Validate required fields
+    // 1. Validate required fields
     if (!userId || !platform || !logDate) {
       return NextResponse.json(
         { error: "Missing required fields (userId, platform, logDate)" },
@@ -14,49 +14,54 @@ export async function POST(req: Request) {
       );
     }
 
-    // Verify user exists first
-    const userExists = await prisma.user.findUnique({
+    // 2. Verify user exists first
+    const user = await prisma.user.findUnique({
       where: { id: userId }
     });
 
-    if (!userExists) {
+    if (!user) {
       return NextResponse.json(
         { error: "User not found" },
         { status: 404 }
       );
     }
 
-    // Create the log with string-based wasProductive
-    const log = await prisma.socialMediaLog.create({
-      data: {
-        logDate: new Date(logDate),
-        duration: Number(duration),
-        mood,
-        activity,
-        wasProductive, // Directly use the string value ('yes'/'no')
-        habit: {
-          connectOrCreate: {
-            where: {
-              platform_userId: {
-                platform,
-                userId
-              }
-            },
-            create: {
-              platform,
-              user: { connect: { id: userId } },
-              icon: getDefaultIcon(platform),
-              goalDuration: 60
-            }
+    // 3. Create in transaction to ensure data consistency
+    const result = await prisma.$transaction(async (tx) => {
+      // First find or create the habit
+      const habit = await tx.socialMediaHabit.upsert({
+        where: {
+          platform_userId: {
+            platform,
+            userId
           }
+        },
+        create: {
+          platform,
+          userId,  // Directly assign userId
+          icon: getDefaultIcon(platform),
+          goalDuration: 60
+        },
+        update: {} // No updates needed if exists
+      });
+
+      // Then create the log
+      return await tx.socialMediaLog.create({
+        data: {
+          logDate: new Date(logDate),
+          duration: Number(duration),
+          mood,
+          activity,
+          wasProductive,
+          habitId: habit.id  // Directly connect using habitId
+        },
+        include: {
+          habit: true
         }
-      },
-      include: {
-        habit: true
-      }
+      });
     });
 
-    return NextResponse.json(log);
+    return NextResponse.json(result);
 
   } catch (error) {
     console.error('Database error:', error);
@@ -76,7 +81,7 @@ function getDefaultIcon(platform: string): string {
   const icons: Record<string, string> = {
     'Instagram': '/icons/instagram.png',
     'Facebook': '/icons/facebook.png',
-    'Twitter': '/icons/twitter.png',
+    'Twitter': '/icons/twitter.png', 
     'TikTok': '/icons/tiktok.png',
     'LinkedIn': '/icons/linkedin.png'
   };
