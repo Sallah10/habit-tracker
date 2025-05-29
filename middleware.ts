@@ -13,7 +13,7 @@ export default withAuth(
     },
     // Optional: specify which routes to protect
     pages: {
-      signIn: '/login'
+      signIn: '/auth/login'
     }
   }
 );
@@ -22,7 +22,7 @@ export default withAuth(
 export const config = { 
   matcher: [
     '/dashboard/:path*',
-    // '/habits/:path*',
+    '/tracker/:path*',
     // '/profile/:path*'
   ]
 };
