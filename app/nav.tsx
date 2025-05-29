@@ -152,13 +152,13 @@ const Nav = () => {
               Dashboard
             </Link>
             {session ? (
-              <Link href="/login">
+              <Link href="/auth/login">
                 <button onClick={handleLogout} className="hover:text-blue-300">
                   Logout
                 </button>
               </Link>
             ) : (
-              <Link href="/login" className="hover:text-blue-300">
+              <Link href="/auth/login" className="hover:text-blue-300">
                 Login
               </Link>
             )}
