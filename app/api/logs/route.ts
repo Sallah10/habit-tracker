@@ -60,7 +60,8 @@ export async function POST(req: Request) {
         }
       });
     });
-
+// console.log('Session user ID:', session?.user?.id);
+console.log('User from DB:', user);
     return NextResponse.json(result);
 
   } catch (error) {
@@ -79,11 +80,15 @@ export async function POST(req: Request) {
 
 function getDefaultIcon(platform: string): string {
   const icons: Record<string, string> = {
-    'Instagram': '/icons/instagram.png',
-    'Facebook': '/icons/facebook.png',
-    'Twitter': '/icons/twitter.png', 
-    'TikTok': '/icons/tiktok.png',
-    'LinkedIn': '/icons/linkedin.png'
+    Instagram: '/default/instagram.png',
+    Facebook: '/default/facebook.png',
+    Twitter: '/default/tweeter.png',
+    TikTok: '/default/tiktok.png',
+    Youtube: '/default/youtube.png',
+    Snapchat: '/default/snapchat.png',
+    Discord: '/default/discord.png',
+    // Add other platforms
   };
-  return icons[platform] || '/icons/default.png';
+  return icons[platform] || '/default/social.png';
 }
+

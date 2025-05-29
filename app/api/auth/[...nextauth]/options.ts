@@ -46,30 +46,31 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
-  callbacks: {
+    callbacks: {
     async signIn({ user, account, profile }) {
-      // Only handle Google OAuth sign-in
       if (account?.provider === "google") {
-        // Check if the user already exists in the database
+        // Check if user exists or create new one
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email! },
         });
 
-        // If the user doesn't exist, create a new user
         if (!existingUser) {
-          await prisma.user.create({
+          const newUser = await prisma.user.create({
             data: {
+              id: user.id, // Use the Google ID as the database ID
               email: user.email!,
               name: user.name || profile?.name || "Unknown",
-              // Add other fields if needed
             },
           });
+          user.id = newUser.id; // Ensure the user object has the database ID
+        } else {
+          user.id = existingUser.id; // Ensure the user object has the database ID
         }
       }
-
-      return true; // Allow sign-in
+      return true;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user}) {
+      // Initial sign in
       if (user) {
         token.id = user.id;
       }
