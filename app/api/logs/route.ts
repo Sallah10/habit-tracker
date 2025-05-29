@@ -52,7 +52,7 @@ export async function POST(req: Request) {
           duration: Number(duration),
           mood,
           activity,
-          wasProductive,
+          wasProductive: wasProductive ? "yes" : "no",
           habitId: habit.id  // Directly connect using habitId
         },
         include: {
