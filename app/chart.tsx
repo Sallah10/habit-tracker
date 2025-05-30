@@ -14,7 +14,7 @@ import {
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "#4FD1C5",  // Teal for better visibility
+    color: "#93c5fd",  // #4FD1C5Teal for better visibility
   },
   mobile: {
     label: "Mobile",
