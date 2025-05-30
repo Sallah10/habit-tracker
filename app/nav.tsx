@@ -152,15 +152,15 @@ const Nav = () => {
               Dashboard
             </Link>
             {session ? (
-              <Link href="/auth/login">
+              <a href="/auth/login">
                 <button onClick={handleLogout} className="hover:text-blue-300">
                   Logout
                 </button>
-              </Link>
+              </a>
             ) : (
-              <Link href="/auth/login" className="hover:text-blue-300">
+              <a href="/auth/login" className="hover:text-blue-300">
                 Login
-              </Link>
+              </a>
             )}
           </div>
         </div>
@@ -190,15 +190,15 @@ const Nav = () => {
               Dashboard
             </Link>
             {session ? (
-              <Link href="/auth/login">
+              <a href="/auth/login">
                 <button onClick={handleLogout} className="hover:text-blue-300">
                   Logout
                 </button>
-              </Link>
+              </a>
             ) : (
-              <Link href="/auth/login" onClick={toggleClick} className="hover:text-blue-300">
+              <a href="/auth/login" onClick={toggleClick} className="hover:text-blue-300">
                 Login
-              </Link>
+              </a>
             )}
           </div>
         </div>
