@@ -21,7 +21,7 @@ const chartConfig = {
     color: "#F687B3",  // Pink for contrast
   },
   hover: {
-    color: "#FFFFFF",  // White for hover (will adjust opacity)
+    color: "#D9D9D9",  // White for hover (will adjust opacity)
   }
 } satisfies ChartConfig
 
