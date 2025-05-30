@@ -1,11 +1,26 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { Loader2, Plus } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 
-export interface LogEntry {
+type SocialPlatform = 'Instagram' | 'Facebook' | 'Twitter' | 'TikTok' | 'LinkedIn';
+type Mood = 'Happy' | 'Neutral' | 'Sad' | 'Anxious';
+type ActivityType = 'Browsing' | 'Surfing' | 'Posting' | 'Messaging' | 'Research';
+
+interface ApiLogEntry {
+  id: string;
+  logDate: string;
+  duration: number;
+  mood: string | null;
+  activity: string | null;
+  wasProductive: boolean | null;
+  habit: {
+    platform: SocialPlatform;
+  };
+}
+interface LogEntry {
   id: string;
   logDate: string;
   platform: SocialPlatform;
@@ -14,10 +29,6 @@ export interface LogEntry {
   activity: ActivityType;
   wasProductive: boolean;
 }
-
-type SocialPlatform = 'Instagram' | 'Facebook' | 'Twitter' | 'TikTok' | 'LinkedIn';
-type Mood = 'Happy' | 'Neutral' | 'Sad' | 'Anxious';
-type ActivityType = 'Browsing' | 'Surfing' | 'Posting' | 'Messaging' | 'Research';
 
 interface FormData {
   logDate: string;
@@ -28,9 +39,10 @@ interface FormData {
   wasProductive: 'yes' | 'no';
 }
 
-const SocialMediaTracker: React.FC = () => {
+const SocialMediaTracker = () => {
   const { data: session } = useSession();
   const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState<FormData>({
     logDate: new Date().toISOString().split('T')[0],
     platform: 'Instagram',
@@ -42,48 +54,88 @@ const SocialMediaTracker: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  useEffect(() => {
+    const fetchLogs = async () => {
+      if (!session?.user?.id) return;
+
+      try {
+        setIsLoading(true);
+        const response = await fetch(`/api/logs?userId=${session.user.id}`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch logs');
+        }
+
+        const data: ApiLogEntry[] = await response.json();
+
+        // Transform API data to match our frontend types
+        const typedLogs = data.map((log): LogEntry => ({
+          id: log.id,
+          logDate: new Date(log.logDate).toISOString().split('T')[0],
+          platform: log.habit.platform,
+          duration: log.duration,
+          mood: log.mood as Mood || 'Neutral', // Default to 'Neutral' if null
+          activity: log.activity as ActivityType || 'Browsing', // Default to 'Browsing' if null
+          wasProductive: log.wasProductive || false // Default to false if null
+        }));
+
+        setLogs(typedLogs);
+      } catch (error) {
+        console.error('Error fetching logs:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load logs');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchLogs();
+  }, [session]);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
+
     if (!session?.user?.id) {
       alert('You must be logged in to log activity.');
       return;
     }
-
-    if (formData.duration <= 0) {
-      alert('Please enter a valid duration');
-      return;
-    }
-
-    const newLog = {
-      ...formData,
-      duration: formData.duration,
-      wasProductive: formData.wasProductive === 'yes',
-    };
 
     try {
       const response = await fetch('/api/logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...newLog,
+          ...formData,
           userId: session.user.id,
         }),
       });
 
       if (!response.ok) {
-        // throw new Error('Failed to save log');
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to save log');
       }
 
-      const savedLog = await response.json();
-      setLogs([...logs, savedLog]);
+      const savedLog: ApiLogEntry = await response.json();
+
+      // Transform the saved log to match our frontend type
+      const newLogEntry: LogEntry = {
+        id: savedLog.id,
+        logDate: new Date(savedLog.logDate).toISOString().split('T')[0],
+        platform: savedLog.habit.platform,
+        duration: savedLog.duration,
+        mood: savedLog.mood as Mood || 'Neutral',
+        activity: savedLog.activity as ActivityType || 'Browsing',
+        wasProductive: savedLog.wasProductive || false
+      };
+
+      setLogs(prev => [newLogEntry, ...prev]);
+
+      // Reset form
       setFormData({
         logDate: new Date().toISOString().split('T')[0],
         platform: 'Instagram',
-        duration: 0, // Reset to default
+        duration: 0,
         mood: 'Neutral',
         activity: 'Browsing',
         wasProductive: 'yes',
@@ -96,18 +148,15 @@ const SocialMediaTracker: React.FC = () => {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+
     if (name === 'duration') {
       if (value === '') {
-        setFormData(prev => ({
-          ...prev,
-          duration: 0
-        }));
+        setFormData(prev => ({ ...prev, duration: 0 }));
         return;
       }
-
-      if (value && !/^\d+$/.test(value)) return; // Only allow numbers
+      if (!/^\d+$/.test(value)) return;
     }
 
     setFormData(prev => ({
@@ -116,7 +165,6 @@ const SocialMediaTracker: React.FC = () => {
     }));
   };
 
-  // Process data for the chart
   const chartData = logs.reduce((acc: { logDate: string; duration: number }[], log) => {
     const date = new Date(log.logDate).toLocaleDateString();
     const existing = acc.find(item => item.logDate === date);
@@ -128,6 +176,14 @@ const SocialMediaTracker: React.FC = () => {
     return acc;
   }, []).sort((a, b) => new Date(a.logDate).getTime() - new Date(b.logDate).getTime());
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
       {error && (
@@ -135,9 +191,9 @@ const SocialMediaTracker: React.FC = () => {
           <p>Error: {error}</p>
         </div>
       )}
+
       <Card>
         <CardHeader>
-          {/* Social Media Usage Logger */}
           <CardTitle>HabiTapp Logger</CardTitle>
         </CardHeader>
         <CardContent>
@@ -164,11 +220,9 @@ const SocialMediaTracker: React.FC = () => {
                   className="w-full p-2 border rounded"
                   required
                 >
-                  <option value="Instagram">Instagram</option>
-                  <option value="Facebook">Facebook</option>
-                  <option value="Twitter">Twitter</option>
-                  <option value="TikTok">TikTok</option>
-                  <option value="LinkedIn">LinkedIn</option>
+                  {['Instagram', 'Facebook', 'Twitter', 'TikTok', 'LinkedIn'].map(platform => (
+                    <option key={platform} value={platform}>{platform}</option>
+                  ))}
                 </select>
               </div>
 
@@ -193,10 +247,9 @@ const SocialMediaTracker: React.FC = () => {
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                 >
-                  <option value="Happy">Happy</option>
-                  <option value="Neutral">Neutral</option>
-                  <option value="Sad">Sad</option>
-                  <option value="Anxious">Anxious</option>
+                  {['Happy', 'Neutral', 'Sad', 'Anxious'].map(mood => (
+                    <option key={mood} value={mood}>{mood}</option>
+                  ))}
                 </select>
               </div>
 
@@ -208,16 +261,14 @@ const SocialMediaTracker: React.FC = () => {
                   onChange={handleChange}
                   className="w-full p-2 border rounded"
                 >
-                  <option value="Browsing">Browsing</option>
-                  <option value="Surfing">Surfing</option>
-                  <option value="Posting">Posting</option>
-                  <option value="Messaging">Messaging</option>
-                  <option value="Research">Research</option>
+                  {['Browsing', 'Surfing', 'Posting', 'Messaging', 'Research'].map(activity => (
+                    <option key={activity} value={activity}>{activity}</option>
+                  ))}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Was it productive time?</label>
+                <label className="block text-sm font-medium mb-1">Was it productive?</label>
                 <select
                   name="wasProductive"
                   value={formData.wasProductive}
@@ -253,69 +304,69 @@ const SocialMediaTracker: React.FC = () => {
       </Card>
 
       {logs.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Usage Trends</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="w-full overflow-x-auto">
-              <LineChart
-                width={800}
-                height={400}
-                data={chartData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="logDate" />
-                <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
-                <Tooltip />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="duration"
-                  stroke="#8884d8"
-                  name="Time Spent (minutes)"
-                />
-              </LineChart>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+        <>
+          <Card>
+            <CardHeader>
+              <CardTitle>Usage Trends</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="w-full overflow-x-auto">
+                <LineChart
+                  width={800}
+                  height={400}
+                  data={chartData}
+                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="logDate" />
+                  <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
+                  <Tooltip />
+                  <Legend />
+                  <Line
+                    type="monotone"
+                    dataKey="duration"
+                    stroke="#8884d8"
+                    name="Time Spent (minutes)"
+                  />
+                </LineChart>
+              </div>
+            </CardContent>
+          </Card>
 
-      {logs.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Logs</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left p-2">Date</th>
-                    <th className="text-left p-2">Platform</th>
-                    <th className="text-left p-2">Time (min)</th>
-                    <th className="text-left p-2">Mood</th>
-                    <th className="text-left p-2">Activity</th>
-                    <th className="text-left p-2">Productive?</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {logs.map(log => (
-                    <tr key={log.id} className="border-t">
-                      <td className="p-2">{log.logDate}</td>
-                      <td className="p-2">{log.platform}</td>
-                      <td className="p-2">{log.duration}</td>
-                      <td className="p-2">{log.mood}</td>
-                      <td className="p-2">{log.activity}</td>
-                      <td className="p-2">{log.wasProductive}</td>
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Logs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left">
+                      <th className="p-2">Date</th>
+                      <th className="p-2">Platform</th>
+                      <th className="p-2">Time (min)</th>
+                      <th className="p-2">Mood</th>
+                      <th className="p-2">Activity</th>
+                      <th className="p-2">Productive?</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
+                  </thead>
+                  <tbody>
+                    {logs.map(log => (
+                      <tr key={log.id} className="border-t">
+                        <td className="p-2">{log.logDate}</td>
+                        <td className="p-2">{log.platform}</td>
+                        <td className="p-2">{log.duration}</td>
+                        <td className="p-2">{log.mood}</td>
+                        <td className="p-2">{log.activity}</td>
+                        <td className="p-2">{log.wasProductive ? 'Yes' : 'No'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+        </>
       )}
     </div>
   );
