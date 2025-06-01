@@ -39,7 +39,7 @@ interface HabitTrackerProps {
   data: HabitData[];
 }
 
-export const HabitTrackerChart: React.FC<HabitTrackerProps> = ({ data }) => {
+export const Component: React.FC<HabitTrackerProps> = ({ data }) => {
   if (!data || data.length === 0) {
     return (
       <div className="text-white p-4 text-center">
