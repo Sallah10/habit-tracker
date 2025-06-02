@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { Component } from "../chart";
-import { ChartData } from "@/types/chart";
+import { HabitData } from "@/types/chart";
 // import Hero from "../hero"
 
 const container = {
@@ -22,7 +22,7 @@ const item = {
 };
 
 interface AnimatedDashboardProps {
-  chartData: ChartData;
+  chartData: HabitData[];
   hours: number;
   minutes: number;
   name: string;
@@ -34,7 +34,7 @@ export default function AnimatedDashboard({
   minutes,
   name
 }: AnimatedDashboardProps) {
-  if (!chartData?.platforms || !Array.isArray(chartData.platforms)) {
+  if (!chartData || !Array.isArray(chartData)) {
     console.error("Invalid chartData structure:", chartData);
     return (
       <div className="text-white p-4">

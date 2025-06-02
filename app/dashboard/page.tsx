@@ -6,73 +6,61 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 import prisma from '@/lib/prisma';
 import AnimatedDashboard from "../AnimatedDashboard/page";
-import { ChartData, PlatformData, DailyData } from "@/types/chart";
+import { HabitData } from "@/types/chart";
 
 const Dashboard = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
 
   if (!session) {
-    redirect('/auth/login');
+    redirect('/auth/login')
   }
 
+  // Fetch logs with related habit data
   const logs = await prisma.socialMediaLog.findMany({
-    where: { habit: { userId: session.user.id } },
-    include: { habit: true },
-    orderBy: { logDate: 'asc' }
-  });
-
-  const chartData: ChartData = {
-    daily: [],
-    platforms: []
-  };
-
-  try {
-    // Transform daily data
-    chartData.daily = logs.reduce((acc: DailyData[], log) => {
-      const date = log.logDate.toISOString().split('T')[0];
-      const existing = acc.find(item => item.name === date);
-      if (existing) {
-        existing.total += log.duration;
-      } else {
-        acc.push({ name: date, total: log.duration });
+    where: {
+      habit: {
+        userId: session.user.id
       }
-      return acc;
-    }, []);
-
-    // Transform platform data
-    chartData.platforms = logs.reduce((acc: PlatformData[], log) => {
-      const platformName = log.habit?.platform || "Unknown";
-      const existing = acc.find(item => item.name === platformName);
-      if (existing) {
-        existing.total += log.duration;
-      } else {
-        acc.push({
-          name: platformName,
-          total: log.duration,
-          desktop: log.duration * 0.6, // Example distribution
-          mobile: log.duration * 0.4   // Example distribution
-        });
+    },
+    include: {
+      habit: {
+        select: {
+          platform: true,
+          goalDuration: true
+        }
       }
-      return acc;
-    }, []);
-  } catch (error) {
-    console.error("Error transforming chart data:", error);
-  }
+    },
+    orderBy: {
+      logDate: 'asc'
+    }
+  })
 
-  const totalMinutes = logs.reduce((sum: number, log) => sum + log.duration, 0);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
+  // Transform to HabitData[] format matching your schema
+  const habitData: HabitData[] = logs.map(log => ({
+    date: log.logDate.toISOString().split('T')[0],
+    completed: log.duration,
+    total: log.habit?.goalDuration || 60, // Default to 60 mins if no goal set
+    platform: {
+      desktop: log.duration, // Using full duration since we don't have device split
+      mobile: 0              // You might want to add device tracking to your schema
+    },
+    mood: log.mood || undefined,
+    activity: log.activity || undefined,
+    wasProductive: log.wasProductive === 'yes'
+  }))
+
+  // Calculate total usage time
+  const totalMinutes = logs.reduce((sum, log) => sum + log.duration, 0)
+  const hours = Math.floor(totalMinutes / 60)
+  const minutes = totalMinutes % 60
 
   return (
-    <>
-      {/* <Hero /> */}
-      <AnimatedDashboard
-        chartData={chartData}
-        hours={hours}
-        minutes={minutes}
-        name={session.user.name || "User"}
-      />
-    </>
+    <AnimatedDashboard
+      chartData={habitData}
+      hours={hours}
+      minutes={minutes}
+      name={session.user.name || "User"}
+    />
   )
 }
 
