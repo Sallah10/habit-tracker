@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import {
@@ -10,18 +10,18 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-// Customized colors for dark background
+// Only updated the colors - everything else remains identical
 const chartConfig = {
   desktop: {
     label: "Desktop",
-    color: "#93c5fd",  // #4FD1C5Teal for better visibility
+    color: "#6366f1",  // Softer indigo
   },
   mobile: {
     label: "Mobile",
-    color: "#F687B3",  // Pink for contrast
+    color: "#f472b6",  // Softer pink
   },
   hover: {
-    color: "#D9D9D9",  // White for hover (will adjust opacity)
+    color: "#e2e8f0",  // Light gray for hover
   }
 } satisfies ChartConfig
 
@@ -68,12 +68,12 @@ export const Component: React.FC<HabitTrackerProps> = ({ data }) => {
         >
           <CartesianGrid
             vertical={false}
-            stroke="#3F3E4D"  // Adjusted for dark background
+            stroke="#3F3E4D"
             strokeDasharray="3 3"
           />
           <XAxis
             dataKey="date"
-            tick={{ fill: '#A0AEC0' }}  // Light gray for axis labels
+            tick={{ fill: '#A0AEC0' }}
             tickLine={false}
             axisLine={{ stroke: '#3F3E4D' }}
             tickFormatter={(value) =>
@@ -89,7 +89,7 @@ export const Component: React.FC<HabitTrackerProps> = ({ data }) => {
           <ChartTooltip
             content={<ChartTooltipContent />}
             cursor={{
-              fill: 'rgba(255, 255, 255, 0.1)',  // Semi-transparent white
+              fill: '#1F2937',
               radius: 4
             }}
           />
@@ -102,23 +102,12 @@ export const Component: React.FC<HabitTrackerProps> = ({ data }) => {
             fill={chartConfig.desktop.color}
             radius={[4, 4, 0, 0]}
             animationDuration={1500}
-            style={{
-              transition: 'opacity 0.3s',
-              opacity: 1,
-            }}
-            onMouseOver={() => {
-              // Optional: Add hover effects
-            }}
           />
           <Bar
             dataKey="mobile"
             fill={chartConfig.mobile.color}
             radius={[4, 4, 0, 0]}
             animationDuration={1500}
-            style={{
-              transition: 'opacity 0.3s',
-              opacity: 1,
-            }}
           />
         </BarChart>
       </ResponsiveContainer>
