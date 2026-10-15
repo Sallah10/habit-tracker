@@ -1,4 +1,4 @@
-// app/components/AnimatedDashboard.tsx
+// app/AnimatedDashboard/AnimatedDashboard.tsx
 "use client";
 
 import { motion } from "framer-motion";
@@ -26,13 +26,17 @@ interface AnimatedDashboardProps {
   hours: number;
   minutes: number;
   name: string;
+  currentStreak: number;
+  longestStreak: number;
 }
 
 export default function AnimatedDashboard({
   chartData,
   hours,
   minutes,
-  name
+  name,
+  currentStreak,
+  longestStreak
 }: AnimatedDashboardProps) {
   if (!chartData || !Array.isArray(chartData)) {
     console.error("Invalid chartData structure:", chartData);
@@ -87,6 +91,24 @@ export default function AnimatedDashboard({
           >
             {hours}h {minutes}m
           </motion.h1>
+        </motion.div>
+
+        {/* Streaks - counts days in a row with at least one log */}
+        <motion.div variants={container} className="flex gap-8 justify-center">
+          <motion.div
+            variants={item}
+            className="flex flex-col items-center bg-[#3d3b50] rounded-2xl px-8 py-4"
+          >
+            <span className="text-4xl font-bold">{currentStreak}</span>
+            <span className="text-gray-300">day current streak</span>
+          </motion.div>
+          <motion.div
+            variants={item}
+            className="flex flex-col items-center bg-[#3d3b50] rounded-2xl px-8 py-4"
+          >
+            <span className="text-4xl font-bold">{longestStreak}</span>
+            <span className="text-gray-300">day best streak</span>
+          </motion.div>
         </motion.div>
 
         <motion.div

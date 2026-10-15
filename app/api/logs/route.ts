@@ -1,23 +1,26 @@
 // app/api/logs/route.ts
 import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/options';
 import prisma from '@/lib/prisma';
+import { getPlatformIconPath } from '@/lib/platforms';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-    
-    if (!userId) {
+    // Always read the user from the session - never from the query string.
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
       return NextResponse.json(
-        { error: "User ID is required" },
-        { status: 400 }
+        { error: 'You must be signed in to view logs' },
+        { status: 401 }
       );
     }
 
     const logs = await prisma.socialMediaLog.findMany({
       where: {
         habit: {
-          userId
+          userId: session.user.id
         }
       },
       include: {
@@ -40,29 +43,35 @@ export async function GET(request: Request) {
 
 export async function POST(req: Request) {
   try {
-    const { logDate, platform, duration, mood, activity, wasProductive, userId } = await req.json();
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: 'You must be signed in to save logs' },
+        { status: 401 }
+      );
+    }
+
+    const userId = session.user.id;
+    const { logDate, platform, duration, mood, activity, wasProductive } = await req.json();
 
     // 1. Validate required fields
-    if (!userId || !platform || !logDate) {
+    if (!platform || !logDate) {
       return NextResponse.json(
-        { error: "Missing required fields (userId, platform, logDate)" },
+        { error: 'Missing required fields (platform, logDate)' },
         { status: 400 }
       );
     }
 
-    // 2. Verify user exists first
-    const user = await prisma.user.findUnique({
-      where: { id: userId }
-    });
-
-    if (!user) {
+    const minutes = Number(duration);
+    if (!Number.isFinite(minutes) || minutes < 0) {
       return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
+        { error: 'Duration must be a positive number of minutes' },
+        { status: 400 }
       );
     }
 
-    // 3. Create in transaction to ensure data consistency
+    // 2. Create in transaction to ensure data consistency
     const result = await prisma.$transaction(async (tx) => {
       // First find or create the habit
       const habit = await tx.socialMediaHabit.upsert({
@@ -74,8 +83,8 @@ export async function POST(req: Request) {
         },
         create: {
           platform,
-          userId,  // Directly assign userId
-          icon: getDefaultIcon(platform),
+          userId,
+          icon: getPlatformIconPath(platform),
           goalDuration: 60
         },
         update: {} // No updates needed if exists
@@ -85,27 +94,26 @@ export async function POST(req: Request) {
       return await tx.socialMediaLog.create({
         data: {
           logDate: new Date(logDate),
-          duration: Number(duration),
+          duration: minutes,
           mood,
           activity,
-          wasProductive: wasProductive ? "yes" : "no",
-          habitId: habit.id  // Directly connect using habitId
+          wasProductive: wasProductive === true || wasProductive === 'yes' ? 'yes' : 'no',
+          habitId: habit.id
         },
         include: {
           habit: true
         }
       });
     });
-// console.log('Session user ID:', session?.user?.id);
-console.log('User from DB:', user);
-    return NextResponse.json(result);
+
+    return NextResponse.json(result, { status: 201 });
 
   } catch (error) {
     console.error('Database error:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to create log',
-        details: process.env.NODE_ENV === 'development' 
+        details: process.env.NODE_ENV === 'development'
           ? error instanceof Error ? error.message : String(error)
           : undefined
       },
@@ -113,18 +121,3 @@ console.log('User from DB:', user);
     );
   }
 }
-
-function getDefaultIcon(platform: string): string {
-  const icons: Record<string, string> = {
-    Instagram: '/default/instagram.png',
-    Facebook: '/default/facebook.png',
-    Twitter: '/default/tweeter.png',
-    TikTok: '/default/tiktok.png',
-    Youtube: '/default/youtube.png',
-    Snapchat: '/default/snapchat.png',
-    Discord: '/default/discord.png',
-    // Add other platforms
-  };
-  return icons[platform] || '/default/social.png';
-}
-

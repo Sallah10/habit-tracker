@@ -1,29 +1,12 @@
-// // lib/prisma.ts
-// import { PrismaClient } from "@prisma/client";
-
-// declare global {
-//   // eslint-disable-next-line no-var
-//   var prisma: PrismaClient | undefined;
-// }
-
-
-// const client = globalThis.prisma || new PrismaClient();
-// if (process.env.NODE_ENV !== "production") globalThis.prisma = client;
-
-// export default client;
-// import { PrismaClient } from '../app/generated/prisma'
-// import { withAccelerate } from '@prisma/extension-accelerate'
-
-// const globalForPrisma = global as unknown as { 
-//     prisma: PrismaClient
-// }
-
-// const prisma = globalForPrisma.prisma || new PrismaClient().$extends(withAccelerate())
-
-// if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
-
-// export default prisma
+// lib/prisma.ts
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Without this, every hot reload in dev spins up a new client and we run out of
+// database connections. Keep one client on globalThis instead.
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
+
+const prisma = globalForPrisma.prisma || new PrismaClient();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+
 export default prisma;

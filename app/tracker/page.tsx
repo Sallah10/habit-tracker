@@ -15,7 +15,7 @@ interface ApiLogEntry {
   duration: number;
   mood: string | null;
   activity: string | null;
-  wasProductive: boolean | null;
+  wasProductive: string | null;
   habit: {
     platform: SocialPlatform;
   };
@@ -60,7 +60,7 @@ const SocialMediaTracker = () => {
 
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/logs?userId=${session.user.id}`);
+        const response = await fetch('/api/logs');
 
         if (!response.ok) {
           throw new Error('Failed to fetch logs');
@@ -76,7 +76,7 @@ const SocialMediaTracker = () => {
           duration: log.duration,
           mood: log.mood as Mood || 'Neutral', // Default to 'Neutral' if null
           activity: log.activity as ActivityType || 'Browsing', // Default to 'Browsing' if null
-          wasProductive: log.wasProductive || false // Default to false if null
+          wasProductive: log.wasProductive === 'yes' // It's stored as "yes"/"no", not a boolean
         }));
 
         setLogs(typedLogs);
@@ -105,10 +105,7 @@ const SocialMediaTracker = () => {
       const response = await fetch('/api/logs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          userId: session.user.id,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) {
@@ -126,7 +123,7 @@ const SocialMediaTracker = () => {
         duration: savedLog.duration,
         mood: savedLog.mood as Mood || 'Neutral',
         activity: savedLog.activity as ActivityType || 'Browsing',
-        wasProductive: savedLog.wasProductive || false
+        wasProductive: savedLog.wasProductive === 'yes'
       };
 
       setLogs(prev => [newLogEntry, ...prev]);

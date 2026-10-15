@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Nav from "./nav";
 import SessionWrapper from "./SessionWrapper"; // Import the SessionWrapper
+import ServiceWorkerRegister from "./ServiceWorkerRegister";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -16,8 +17,20 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Habit Tracker",
-  description: "A Habit Tracker for Everyone Created by Sallah using Next.js",
+  title: "HabiTapp - Social Media Habit Tracker",
+  description: "Track your social media habits, keep your streak alive and take your time back.",
+  applicationName: "HabiTapp",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "HabiTapp",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#26252F",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -31,6 +44,7 @@ export default function RootLayout({
         <SessionWrapper> {/* Wrap the entire layout in SessionWrapper */}
           <Nav />
           {children}
+          <ServiceWorkerRegister />
         </SessionWrapper>
       </body>
     </html>

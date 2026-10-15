@@ -5,8 +5,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { redirect } from "next/navigation";
 import prisma from '@/lib/prisma';
-import AnimatedDashboard from "../AnimatedDashboard/page";
+import AnimatedDashboard from "../AnimatedDashboard/AnimatedDashboard";
 import { HabitData } from "@/types/chart";
+import { getCurrentStreak, getLongestStreak } from "@/lib/streaks";
 
 const Dashboard = async () => {
   const session = await getServerSession(authOptions)
@@ -54,12 +55,19 @@ const Dashboard = async () => {
   const hours = Math.floor(totalMinutes / 60)
   const minutes = totalMinutes % 60
 
+  // Streaks: one entry per day that has at least one log
+  const logDates = logs.map(log => log.logDate.toISOString().split('T')[0])
+  const currentStreak = getCurrentStreak(logDates)
+  const longestStreak = getLongestStreak(logDates)
+
   return (
     <AnimatedDashboard
       chartData={habitData}
       hours={hours}
       minutes={minutes}
       name={session.user.name || "User"}
+      currentStreak={currentStreak}
+      longestStreak={longestStreak}
     />
   )
 }
