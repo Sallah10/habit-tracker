@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import Hero from "../../hero";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import google from "/app/assets/google.png";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
@@ -15,6 +16,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,6 +31,8 @@ const Signup = () => {
       setError("Password must be at least 8 characters long");
       return;
     }
+
+    setLoading(true);
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -40,98 +44,127 @@ const Signup = () => {
 
       if (!response.ok) {
         setError(data.error || "Signup failed");
+        setLoading(false);
         return;
       }
-      // Redirect to login or automatically sign in
       router.push("/auth/login");
     } catch (err) {
       setError(`Network error. Please try again. ${err}`);
+      setLoading(false);
     }
   };
 
   const handleGoogleSignUp = async () => {
     try {
-      // Initiate Google OAuth sign-in
-      await signIn("google", { callbackUrl: "/" }); // Redirect to home after sign-up
+      await signIn("google", { callbackUrl: "/" });
     } catch (err) {
       setError(`Google sign-up failed: ${err}`);
     }
   };
 
   return (
-    <>
-      <section className="general">
-        <Hero />
-        <Card className="bg-transparent border-0 self-center">
-          <CardContent>
-            <div className="space-y-4 mb-4">
-              <Button
-                variant="outline"
-                className="w-full text-base flex gap-2 hover:text-gray-400"
-                onClick={handleGoogleSignUp}
-              >
-                Continue with Google
-                <Image src={google} alt="google-icon" width={20} height={20} />
-              </Button>
+    <section className="general items-center">
+      <Hero />
+      <Card className="w-full max-w-md border-white/10 bg-white/[0.05] text-white shadow-2xl backdrop-blur-md">
+        <CardContent className="pt-6">
+          <h1 className="text-center text-2xl font-semibold">Create your account</h1>
+          <p className="mb-6 mt-1 text-center text-sm text-gray-300">
+            Start tracking your habits today
+          </p>
+
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGoogleSignUp}
+            className="w-full gap-2 border-white/20 bg-white/5 text-base text-white hover:bg-white/10 hover:text-white"
+          >
+            Continue with Google
+            <Image src={google} alt="" width={20} height={20} />
+          </Button>
+
+          <div className="my-4 flex items-center gap-3 text-xs text-gray-400">
+            <hr className="w-full border-white/10" />
+            OR
+            <hr className="w-full border-white/10" />
+          </div>
+
+          <form onSubmit={handleSubmit} className="grid gap-4">
+            <div>
+              <label htmlFor="name" className="label">
+                Name
+              </label>
+              <Input
+                id="name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder="Your name"
+                className="field"
+              />
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <hr className="w-full mr-2" />
-              <span className="text-gray-500">OR</span>
-              <hr className="w-full ml-2" />
+            <div>
+              <label htmlFor="email" className="label">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="you@example.com"
+                className="field"
+              />
             </div>
-            <form onSubmit={handleSubmit}>
-              <div className="grid w-full items-center gap-8">
-                <div className="flex flex-col space-y-1.5 gap-4">
-                  <Input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    placeholder="User"
-                    className="bg-[#D9D9D9] text-center shadow-2xl"
-                  />
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    className="bg-[#D9D9D9] text-center shadow-2xl"
-                  />
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    required
-                    className="bg-[#D9D9D9] text-center shadow-2xl"
-                  />
-                  <Input
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm Password"
-                    required
-                    className="bg-[#D9D9D9] text-center shadow-2xl"
-                  />
-                </div>
-                {error && (
-                  <p style={{ color: "red", margin: 0, display: "flex" }}>
-                    {error}
-                  </p>
-                )}
-                <Button type="submit">Sign Up</Button>
-              </div>
-            </form>
-          </CardContent>
-          <CardFooter className="text-white">
-            Already have an account?{" "}
-            <a href="/auth/login" className="ml-1">
-              Login Here
-            </a>
-          </CardFooter>
-        </Card>
-      </section>
-    </>
+            <div>
+              <label htmlFor="password" className="label">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="At least 8 characters"
+                className="field"
+              />
+            </div>
+            <div>
+              <label htmlFor="confirmPassword" className="label">
+                Confirm password
+              </label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                placeholder="Repeat your password"
+                className="field"
+              />
+            </div>
+
+            {error && (
+              <p className="rounded-lg border border-red-500/30 bg-red-500/15 px-3 py-2 text-sm text-red-300">
+                {error}
+              </p>
+            )}
+
+            <Button type="submit" disabled={loading} className="w-full text-base">
+              {loading ? "Creating account..." : "Sign Up"}
+            </Button>
+          </form>
+        </CardContent>
+        <CardFooter className="justify-center text-sm text-gray-300">
+          Already have an account?
+          <Link href="/auth/login" className="ml-1 font-medium text-blue-300 hover:underline">
+            Login
+          </Link>
+        </CardFooter>
+      </Card>
+    </section>
   );
 };
 

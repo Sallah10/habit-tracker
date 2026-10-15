@@ -184,7 +184,7 @@ const SocialMediaTracker = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
       {error && (
-        <div className="bg-red-100 text-red-800 p-4 rounded mb-4">
+        <div className="bg-red-500/15 border border-red-500/30 text-red-300 p-4 rounded-lg mb-4">
           <p>Error: {error}</p>
         </div>
       )}
@@ -203,7 +203,7 @@ const SocialMediaTracker = () => {
                   name="logDate"
                   value={formData.logDate}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="field"
                   required
                 />
               </div>
@@ -214,7 +214,7 @@ const SocialMediaTracker = () => {
                   name="platform"
                   value={formData.platform}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="field"
                   required
                 >
                   {['Instagram', 'Facebook', 'Twitter', 'TikTok', 'LinkedIn'].map(platform => (
@@ -230,7 +230,7 @@ const SocialMediaTracker = () => {
                   name="duration"
                   value={formData.duration}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="field"
                   min="0"
                   required
                 />
@@ -242,7 +242,7 @@ const SocialMediaTracker = () => {
                   name="mood"
                   value={formData.mood}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="field"
                 >
                   {['Happy', 'Neutral', 'Sad', 'Anxious'].map(mood => (
                     <option key={mood} value={mood}>{mood}</option>
@@ -256,7 +256,7 @@ const SocialMediaTracker = () => {
                   name="activity"
                   value={formData.activity}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="field"
                 >
                   {['Browsing', 'Surfing', 'Posting', 'Messaging', 'Research'].map(activity => (
                     <option key={activity} value={activity}>{activity}</option>
@@ -270,7 +270,7 @@ const SocialMediaTracker = () => {
                   name="wasProductive"
                   value={formData.wasProductive}
                   onChange={handleChange}
-                  className="w-full p-2 border rounded"
+                  className="field"
                 >
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -314,11 +314,18 @@ const SocialMediaTracker = () => {
                   data={chartData}
                   margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="logDate" />
-                  <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft' }} />
-                  <Tooltip />
-                  <Legend />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#4b5563" />
+                  <XAxis dataKey="logDate" tick={{ fill: '#9ca3af' }} stroke="#4b5563" />
+                  <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} tick={{ fill: '#9ca3af' }} stroke="#4b5563" />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: '#26252F',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '0.5rem',
+                      color: '#fff',
+                    }}
+                  />
+                  <Legend wrapperStyle={{ color: '#e5e7eb' }} />
                   <Line
                     type="monotone"
                     dataKey="duration"

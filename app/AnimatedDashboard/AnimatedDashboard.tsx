@@ -60,7 +60,7 @@ export default function AnimatedDashboard({
         <motion.p variants={item}>Welcome, {name}</motion.p>
 
         <motion.a
-          href="tracker"
+          href="/tracker"
           className='text-3xl text-gray-300 underline'
           variants={item}
           whileHover={{
@@ -74,7 +74,7 @@ export default function AnimatedDashboard({
 
         <motion.div
           variants={item}
-          className='flex border-8 rounded-full items-center justify-center h-[300px] w-[300px] text-lg'
+          className='flex border-4 border-white/15 rounded-full items-center justify-center h-[300px] w-[300px] text-lg'
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{
@@ -116,8 +116,8 @@ export default function AnimatedDashboard({
           variants={container}
         >
           {[
-            { href: "/dashboard/winddown", text: "Wind Down", subtext: "off" },
-            { href: "/dashboard/focus", text: "Focus Mode", subtext: "off" },
+            { href: "/dashboard/winddown", text: "Wind Down" },
+            { href: "/dashboard/focus", text: "Focus Mode" },
             { href: "/dashboard/mostusedapp", text: "Most Used Apps" }
           ].map((link, index) => (
             <motion.a
@@ -128,14 +128,6 @@ export default function AnimatedDashboard({
               className="group"
             >
               <h1 className="text-2xl group-hover:text-blue-300">{link.text}</h1>
-              {link.subtext && (
-                <motion.small
-                  className="items-center justify-center flex"
-                  whileHover={{ scale: 1.1 }}
-                >
-                  {link.subtext}
-                </motion.small>
-              )}
             </motion.a>
           ))}
         </motion.div>

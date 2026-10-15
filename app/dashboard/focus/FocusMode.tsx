@@ -69,7 +69,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
   const clock = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-[#D9D9D9] rounded-lg p-6 mb-10">
+    <div className="panel w-full max-w-4xl mx-auto mb-10">
       {/* Header with toggle */}
       <div className="flex justify-between items-center mb-6">
         <motion.h1
@@ -114,7 +114,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                   value={sessionDuration}
                   onChange={(e) => setSessionDuration(Number(e.target.value))}
                   disabled={isRunning}
-                  className="w-full max-w-xs"
+                  className="w-full max-w-xs accent-blue-500"
                 />
                 <span className="text-xl font-medium mt-2">
                   {sessionDuration} minutes
@@ -127,7 +127,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                   Select apps to block during focus:
                 </h2>
                 {apps.length === 0 ? (
-                  <p className="text-center text-gray-700">
+                  <p className="text-center text-gray-300">
                     Log some social media usage first and your apps will show up here.
                   </p>
                 ) : (
@@ -142,9 +142,9 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => !isRunning && toggleApp(app.id)}
-                        className={`flex flex-col items-center p-3 rounded-xl cursor-pointer transition-all ${selectedApps.includes(app.id)
-                          ? 'bg-gray-400 shadow-inner'
-                          : 'bg-gray-200 hover:bg-gray-300 shadow-md'
+                        className={`flex flex-col items-center p-3 rounded-xl cursor-pointer transition-all border ${selectedApps.includes(app.id)
+                          ? 'bg-blue-500/30 border-blue-400/60 shadow-inner'
+                          : 'bg-white/[0.06] border-white/10 hover:bg-white/10 shadow-md'
                           }`}
                       >
                         <div className="relative w-12 h-12 mb-2">
@@ -161,7 +161,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                         <span className="text-center font-medium">
                           {app.name}
                         </span>
-                        <span className="text-xs text-gray-600 mt-1">
+                        <span className="text-xs text-gray-400 mt-1">
                           {Math.floor(app.usage / 60)}h {app.usage % 60}m
                         </span>
                       </motion.div>
@@ -205,7 +205,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                       onClick={startSession}
                       disabled={selectedApps.length === 0}
                       className={`px-6 py-3 rounded-full text-lg font-semibold shadow-lg text-white ${selectedApps.length === 0
-                        ? 'bg-gray-400 cursor-not-allowed'
+                        ? 'bg-gray-600 cursor-not-allowed'
                         : 'bg-green-600'
                         }`}
                     >
@@ -215,7 +215,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                 </div>
 
                 {isRunning && (
-                  <p className="text-sm text-gray-700">
+                  <p className="text-sm text-gray-400">
                     Blocking {selectedApps.length} app{selectedApps.length === 1 ? '' : 's'} until the timer ends
                   </p>
                 )}
@@ -232,7 +232,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
             <motion.p className="text-xl md:text-2xl mb-6">
               Block distracting apps when you need to focus
             </motion.p>
-            <motion.p className="text-gray-700">
+            <motion.p className="text-gray-400">
               Your most used apps will be suggested when enabled
             </motion.p>
           </motion.div>

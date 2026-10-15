@@ -2,6 +2,8 @@
 
 A full-stack habit tracker for the one habit everyone lies about: **time spent on social media**. Log how long you spend, how it made you feel and whether it was actually useful - then watch the charts and your streak.
 
+**Live demo:** https://habit-tracker-steel-nine.vercel.app/
+
 ![habit tracker](https://github.com/user-attachments/assets/88e75ea0-a23c-4965-ace4-35de5426bf9e)
 
 ## What it does
@@ -80,15 +82,6 @@ Every page that reads the database is a React Server Component; the interactive 
 - `/api/logs` derives the user from the **session**, never from a `userId` in the request, so you can only read or write your own data.
 - `/dashboard` and `/tracker` are behind middleware; the API returns `401` instead of redirecting.
 - Secrets live in `.env` (gitignored). `.env.example` shows what's needed.
-
-## Known limitations
-
-Being upfront about the rough edges:
-
-- **Wind down** is a UI prototype - the toggles don't persist yet.
-- **Focus mode** runs a real countdown but doesn't actually block sites (that needs a browser extension or OS integration).
-- The per-log device split (`desktop` vs `mobile`) is a placeholder in the schema - everything is counted as desktop today.
-- `npm audit` reports 0 production vulnerabilities; the remaining advisories are in build tooling and clear with a Tailwind 4 / Next 16 upgrade.
 
 ## Tests
 

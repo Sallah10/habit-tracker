@@ -1,15 +1,19 @@
-"use client"; // Mark this as a Client Component
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function NotFound() {
-    const router = useRouter();
-
-    return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-            <h1 className="text2xl">404 - Page Not Found</h1>
-            <p className="text-xl">The page you are looking for does not exist.</p>
-            <button onClick={() => router.push("/")} className=" hover:text-slate-700 underline">Go to Home</button>
-        </div>
-    );
+  return (
+    <div className="flex min-h-[70vh] flex-col items-center justify-center gap-4 px-6 text-center">
+      <p className="text-6xl font-bold text-blue-300">404</p>
+      <h1 className="text-2xl font-semibold">This page took a day off</h1>
+      <p className="max-w-sm text-muted-foreground">
+        We couldn&apos;t find the page you were looking for.
+      </p>
+      <Link
+        href="/"
+        className="mt-2 rounded-full bg-white px-6 py-2 font-semibold text-[#26252F] transition-colors hover:bg-blue-300"
+      >
+        Back to Home
+      </Link>
+    </div>
+  );
 }

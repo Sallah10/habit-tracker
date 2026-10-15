@@ -15,7 +15,7 @@ const Wind = () => {
     <>
       <section className='general'>
         <Hero />
-        <div className="bg-[#D9D9D9] rounded-lg gap-10 flex flex-col items-center px-4 py-6 mb-6 max-w-[500px] self-center">
+        <div className="panel gap-10 flex flex-col items-center max-w-[500px] self-center">
           <div className="flex justify-between w-full items-center">
             <h1 className="text-2xl">Wind Down</h1>
             <Switch

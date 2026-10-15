@@ -50,14 +50,14 @@ const Used = async () => {
     <>
       <section className="general p-4">
         <Hero />
-        <div className="bg-[#D9D9D9] rounded-lg flex flex-col gap-4 px-4 py-6 mb-10">
+        <div className="panel flex flex-col gap-4 mb-10">
           <h1 className="text-2xl self-center flex">Most Used Apps:</h1>
           {sortedPlatforms.length === 0 ? (
             <p className="text-center">No logs yet - add one on the tracker to see this fill up.</p>
           ) : (
             <div className="gap-4 grid-cols-1 items-center grid lg:grid-cols-3 md:grid-cols-2">
               {sortedPlatforms.map(({ platform, duration }) => (
-                <div key={platform} className="flex flex-col gap-4 pb-3 justify-center sm:border-b-4 md:border-none border-gray-900">
+                <div key={platform} className="flex flex-col gap-4 pb-3 justify-center sm:border-b-4 md:border-none border-white/10">
                   <div className="socials">
                     <Image src={getPlatformIcon(platform)} alt={platform} />
                     <div>
@@ -70,7 +70,7 @@ const Used = async () => {
             </div>
           )}
         </div>
-        <div className="bg-[#D9D9D9] rounded-lg flex flex-col gap-4 px-4 py-6 mb-10">
+        <div className="panel flex flex-col gap-4 mb-10">
           <h1 className="text-2xl self-center flex">Total Time Spent:</h1>
           <div className="text-center">
             <h1 className="text-xl">{formatDuration(totalMinutes)}</h1>
