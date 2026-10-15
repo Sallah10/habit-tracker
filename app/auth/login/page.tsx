@@ -120,6 +120,9 @@ const Login = () => {
             <Button type="submit" disabled={loading} className="w-full text-base">
               {loading ? "Signing in..." : "Login"}
             </Button>
+            <div className="mt-4 text-center text-xs text-gray-400">
+              <p>Demo: <span className="font-medium text-gray-200">demo@habit.app</span> / <span className="font-medium text-gray-200">Demo1234</span></p>
+            </div>
 
             <div className="flex items-center gap-3 text-xs text-gray-400">
               <hr className="w-full border-white/10" />

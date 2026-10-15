@@ -159,7 +159,7 @@ const SocialMediaTracker = () => {
           {/* Platform tiles */}
           <div>
             <span className="label">Which app?</span>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
               {PICKABLE.map((p) => {
                 const active = platform === p;
                 return (

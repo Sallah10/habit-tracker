@@ -95,6 +95,9 @@ const Signup = () => {
             Continue with Google
             <Image src={google} alt="" width={20} height={20} />
           </Button>
+            <div className="mt-4 text-center text-xs text-gray-400">
+              <p>Demo: <span className="font-medium text-gray-200">demo@habit.app</span> / <span className="font-medium text-gray-200">Demo1234</span></p>
+            </div>
 
           <div className="my-4 flex items-center gap-3 text-xs text-gray-400">
             <hr className="w-full border-white/10" />

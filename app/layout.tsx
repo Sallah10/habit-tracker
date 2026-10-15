@@ -1,18 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Baloo_Tamma_2, Outfit } from "next/font/google";
+import { Baloo_Tamma_2 } from "next/font/google";
 import "./globals.css";
 import Nav from "./nav";
 import SessionWrapper from "./SessionWrapper";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
 
-const sans = Outfit({
+const font = Baloo_Tamma_2({
   variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
-// Baloo Tamma 2 is rounded and warm - reads as "habit app", not "SaaS dashboard".
-// Kept on headings only; at body size it gets hard to read.
 const display = Baloo_Tamma_2({
   variable: "--font-display",
   subsets: ["latin"],
@@ -44,8 +43,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={` ${display.variable} antialiased`}>
-        <SessionWrapper> {/* Wrap the entire layout in SessionWrapper */}
+      <body className={`${font.variable} ${display.variable} antialiased`}>
+        <SessionWrapper>
           <Nav />
           {children}
           <ServiceWorkerRegister />

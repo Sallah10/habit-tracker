@@ -34,14 +34,13 @@ const Nav = () => {
       : pathname.startsWith(href);
 
   const linkClass = (href: string) =>
-    `text-sm font-medium transition-colors ${
-      isActive(href) ? "text-amber-400" : "text-white/80 hover:text-white"
+    `text-sm font-medium transition-colors ${isActive(href) ? "text-amber-400" : "text-white/80 hover:text-white"
     }`;
 
   const logoHref = signedIn ? "/dashboard" : "/";
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#26252F]/90 backdrop-blur-md text-white">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-[#26252F]/90 backdrop-blur-md text-white font-bold">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3 md:px-8">
         <Link href={logoHref} aria-label="HabiTapp home" className="shrink-0">
           <Image src={logo} alt="HabiTapp" width={104} height={38} priority />
@@ -107,9 +106,8 @@ const Nav = () => {
 
       {/* Mobile menu */}
       <div
-        className={`fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-[#3d3b50] text-white transition-transform duration-300 ease-in-out md:hidden ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-[#3d3b50] text-white transition-transform duration-300 ease-in-out md:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <button
           onClick={() => setMenuOpen(false)}

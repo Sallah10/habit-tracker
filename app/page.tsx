@@ -138,7 +138,7 @@ export default function Home() {
             Three steps, repeated. That&apos;s how habits are built.
           </p>
 
-          <div className="mt-14 grid gap-6 md:grid-cols-3">
+          <div className="mt-14 grid gap-6 grid-cols-1 md:grid-cols-3">
             {steps.map(({ icon: Icon, step, title, body }) => (
               <div key={step} className="rounded-2xl border border-white/10 bg-[#33313f] p-6">
                 <div className="flex items-center justify-between">
