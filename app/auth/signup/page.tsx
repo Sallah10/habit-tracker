@@ -65,7 +65,7 @@ const Signup = () => {
   return (
     <section className="general items-center">
       <Hero />
-      <Card className="w-full max-w-md border-white/10 bg-white/[0.05] text-white shadow-2xl backdrop-blur-md">
+      <Card className="w-full max-w-md border-white/10 bg-[#33313f] text-white shadow-2xl">
         <CardContent className="pt-6">
           <h1 className="text-center text-2xl font-semibold">Create your account</h1>
           <p className="mb-6 mt-1 text-center text-sm text-gray-300">

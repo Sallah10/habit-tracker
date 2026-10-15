@@ -2,7 +2,7 @@
 import React from "react";
 import Hero from "../../hero";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -17,6 +17,31 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+
+  // NextAuth bounces back to this page with ?error=... when OAuth fails.
+  // Read it off the URL so Google misconfiguration isn't a silent failure.
+  useEffect(() => {
+    const code = new URLSearchParams(window.location.search).get("error");
+    if (!code) return;
+
+    const messages: Record<string, string> = {
+      OAuthAccountNotLinked:
+        "That Google account isn't linked to a login. Sign in with your email and password instead.",
+      AccessDenied: "Access denied for that account.",
+      Configuration: "Sign-in isn't configured yet. Try email and password.",
+      OAuthCallback: "Google sign-in was cancelled or failed. Try again.",
+      CredentialsSignin: "Invalid email or password.",
+      Callback: "Sign-in failed. Please try again.",
+      google: "Google sign-in isn't set up yet. Use email and password.",
+    };
+
+    setError(
+      messages[code] ||
+        "Sign-in failed. Please try again or use your email and password."
+    );
+    // Clear the error from the URL so a refresh doesn't re-show it.
+    window.history.replaceState({}, "", window.location.pathname);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +73,7 @@ const Login = () => {
   return (
     <section className="general items-center">
       <Hero />
-      <Card className="w-full max-w-md border-white/10 bg-white/[0.05] text-white shadow-2xl backdrop-blur-md">
+      <Card className="w-full max-w-md border-white/10 bg-[#33313f] text-white shadow-2xl">
         <CardContent className="pt-6">
           <h1 className="text-center text-2xl font-semibold">Welcome back</h1>
           <p className="mb-6 mt-1 text-center text-sm text-gray-300">

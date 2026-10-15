@@ -68,7 +68,7 @@ export default function Home() {
           {features.map(({ icon: Icon, title, body }) => (
             <div
               key={title}
-              className="panel text-left backdrop-blur-md bg-white/[0.06]"
+              className="rounded-2xl border border-white/10 bg-[#33313f] p-6 text-left"
             >
               <Icon className="h-6 w-6 text-blue-300" />
               <h3 className="mt-3 text-lg font-semibold text-white">{title}</h3>
