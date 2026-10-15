@@ -48,7 +48,20 @@ const Signup = () => {
         setLoading(false);
         return;
       }
-      router.push("/auth/login");
+
+      // Sign them straight in instead of bouncing to the login page.
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (result?.error) {
+        router.push("/auth/login");
+        return;
+      }
+      router.push("/onboarding");
+      router.refresh();
     } catch (err) {
       setError(`Network error. Please try again. ${err}`);
       setLoading(false);

@@ -38,7 +38,7 @@ const Login = () => {
 
     setError(
       messages[code] ||
-        "Sign-in failed. Please try again or use your email and password."
+      "Sign-in failed. Please try again or use your email and password."
     );
     // Clear the error from the URL so a refresh doesn't re-show it.
     window.history.replaceState({}, "", window.location.pathname);
@@ -81,7 +81,7 @@ const Login = () => {
             Sign in to keep your streak going
           </p>
 
-          <form onSubmit={handleSubmit} className="grid gap-4">
+          <form onSubmit={handleSubmit} className="grid gap-4 font-bold">
             <div>
               <label htmlFor="email" className="label">
                 Email

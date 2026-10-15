@@ -137,12 +137,20 @@ async function run() {
   const dashboard = await call("/dashboard");
   check("GET /dashboard renders for a signed-in user", dashboard.status === 200, `(got ${dashboard.status})`);
   const dashHtml = await dashboard.text();
-  check("dashboard shows a streak", /day current streak/i.test(dashHtml));
+  check("dashboard shows a streak", /current streak/i.test(dashHtml));
 
   const signedOut = new Map(cookies);
   cookies.clear();
   const tracker = await call("/tracker");
   check("GET /tracker bounces anonymous users to login", tracker.status === 307 || tracker.status === 302, `(got ${tracker.status})`);
+  const onboarding = await call("/onboarding");
+  check("GET /onboarding bounces anonymous users to login", onboarding.status === 307 || onboarding.status === 302, `(got ${onboarding.status})`);
+  const onboardApi = await call("/api/onboarding", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ habits: [{ platform: "Instagram", goalDuration: 90 }] })
+  });
+  check("POST /api/onboarding without a session is 401", onboardApi.status === 401, `(got ${onboardApi.status})`);
   cookies.clear();
   for (const [k, v] of signedOut) cookies.set(k, v);
 

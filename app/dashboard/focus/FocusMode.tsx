@@ -114,7 +114,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                   value={sessionDuration}
                   onChange={(e) => setSessionDuration(Number(e.target.value))}
                   disabled={isRunning}
-                  className="w-full max-w-xs accent-blue-500"
+                  className="w-full max-w-xs accent-amber-400"
                 />
                 <span className="text-xl font-medium mt-2">
                   {sessionDuration} minutes
@@ -143,7 +143,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                         whileTap={{ scale: 0.95 }}
                         onClick={() => !isRunning && toggleApp(app.id)}
                         className={`flex flex-col items-center p-3 rounded-xl cursor-pointer transition-all border ${selectedApps.includes(app.id)
-                          ? 'bg-blue-500/30 border-blue-400/60 shadow-inner'
+                          ? 'bg-amber-400/20 border-amber-400/60 shadow-inner'
                           : 'bg-white/[0.06] border-white/10 hover:bg-white/10 shadow-md'
                           }`}
                       >
@@ -204,9 +204,9 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                       whileTap={{ scale: 0.95 }}
                       onClick={startSession}
                       disabled={selectedApps.length === 0}
-                      className={`px-6 py-3 rounded-full text-lg font-semibold shadow-lg text-white ${selectedApps.length === 0
-                        ? 'bg-gray-600 cursor-not-allowed'
-                        : 'bg-green-600'
+                      className={`px-6 py-3 rounded-full text-lg font-semibold shadow-lg ${selectedApps.length === 0
+                        ? 'bg-gray-600 cursor-not-allowed text-white'
+                        : 'bg-amber-400 text-[#26252F]'
                         }`}
                     >
                       Start Focus Session

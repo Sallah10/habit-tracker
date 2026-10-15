@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Outfit } from "next/font/google";
+import { Baloo_Tamma_2, Outfit } from "next/font/google";
 import "./globals.css";
 import Nav from "./nav";
 import SessionWrapper from "./SessionWrapper";
@@ -11,12 +11,12 @@ const sans = Outfit({
   display: "swap",
 });
 
-// Variable serif for headings. SOFT + WONK axes give it actual personality
-// instead of the usual geometric-sans "startup" look.
-const display = Fraunces({
+// Baloo Tamma 2 is rounded and warm - reads as "habit app", not "SaaS dashboard".
+// Kept on headings only; at body size it gets hard to read.
+const display = Baloo_Tamma_2({
   variable: "--font-display",
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -44,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${sans.variable} ${display.variable} antialiased`}>
+      <body className={` ${display.variable} antialiased`}>
         <SessionWrapper> {/* Wrap the entire layout in SessionWrapper */}
           <Nav />
           {children}

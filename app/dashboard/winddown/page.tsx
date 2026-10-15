@@ -1,117 +1,105 @@
 'use client';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Switch } from "@/components/ui/switch";
-import Image from 'next/image';
-import date from "/app/assets/date.png";
-import Hero from '@/app/hero';
+import { Moon } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { PageHeader } from '@/components/page-header';
 
 const Wind = () => {
-  const [focusMode, setFocusMode] = React.useState(false);
+  const [enabled, setEnabled] = React.useState(false);
   const [doNotDisturb, setDoNotDisturb] = React.useState(false);
   const [greyscale, setGreyscale] = React.useState(false);
 
   return (
-    <>
-      <section className='general'>
-        <Hero />
-        <div className="panel gap-10 flex flex-col items-center max-w-[500px] self-center">
-          <div className="flex justify-between w-full items-center">
-            <h1 className="text-2xl">Wind Down</h1>
-            <Switch
-              checked={focusMode}
-              onCheckedChange={() => setFocusMode(!focusMode)}
-            />
+    <section className="general items-center">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 pb-16">
+        <PageHeader
+          title="Wind Down"
+          subtitle="Schedule a nightly digital detox."
+          backHref="/dashboard/focus"
+          backLabel="Focus"
+        />
+
+        <div className="panel flex flex-col gap-8">
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/15">
+                <Moon className="h-5 w-5 text-amber-400" aria-hidden="true" />
+              </span>
+              <div>
+                <h2 className="text-lg font-semibold text-white">Enable Wind Down</h2>
+                <p className="text-sm text-gray-400">A quiet window at the end of the day.</p>
+              </div>
+            </div>
+            <Switch checked={enabled} onCheckedChange={setEnabled} />
           </div>
 
-          <AnimatePresence>
-            {focusMode && (
+          <AnimatePresence initial={false}>
+            {enabled && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
+                animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.3 }}
-                className="w-full overflow-hidden"
+                className="overflow-hidden"
               >
-                <motion.div
-                  className="flex flex-col gap-8 md:gap-16"
-                  initial={{ y: -20 }}
-                  animate={{ y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  {/* Time Selection */}
-                  <motion.div
-                    className="flex flex-col gap-4 md:flex-row md:justify-between md:px-10"
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <div className="flex justify-between md:flex-col">
-                      <h1 className="text-2xl self-center">Start:</h1>
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:gap-8">
+                    <div className="flex-1">
+                      <label htmlFor="wind-start" className="label">
+                        Start
+                      </label>
                       <input
+                        id="wind-start"
                         type="time"
-                        className="text-xl bg-transparent border-b border-gray-600"
                         defaultValue="22:15"
+                        className="field"
                       />
                     </div>
-                    <div className="flex justify-between md:flex-col">
-                      <h1 className="text-2xl self-center">End:</h1>
+                    <div className="flex-1">
+                      <label htmlFor="wind-end" className="label">
+                        End
+                      </label>
                       <input
+                        id="wind-end"
                         type="time"
-                        className="text-xl bg-transparent border-b border-gray-600"
                         defaultValue="23:15"
+                        className="field"
                       />
                     </div>
-                  </motion.div>
+                  </div>
 
-                  {/* Calendar Integration */}
-                  <motion.div whileTap={{ scale: 0.95 }}>
-                    <Image src={date} alt="date" className="mx-auto" />
-                  </motion.div>
-
-                  {/* Settings */}
-                  <motion.div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h1 className="text-2xl">Do Not Disturb</h1>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-white">Do Not Disturb</span>
                       <Switch
                         checked={doNotDisturb}
-                        onCheckedChange={() => setDoNotDisturb(!doNotDisturb)}
+                        onCheckedChange={setDoNotDisturb}
                       />
                     </div>
-                    <div className="flex justify-between items-center">
-                      <h1 className="text-2xl">Greyscale</h1>
-                      <Switch
-                        checked={greyscale}
-                        onCheckedChange={() => setGreyscale(!greyscale)}
-                      />
+                    <div className="flex items-center justify-between">
+                      <span className="text-white">Greyscale</span>
+                      <Switch checked={greyscale} onCheckedChange={setGreyscale} />
                     </div>
-                  </motion.div>
+                  </div>
 
-                  <motion.p
-                    className="text-xl text-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    Your schedule will activate during Wind Down
-                  </motion.p>
-                </motion.div>
+                  <p className="rounded-lg border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">
+                    Your schedule will activate every night during this window.
+                  </p>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
 
-          {!focusMode && (
-            <motion.p
-              className="text-xl text-center my-24"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              Enable to schedule your nighttime digital detox
-            </motion.p>
+          {!enabled && (
+            <p className="py-8 text-center text-gray-400">
+              Enable wind down to schedule your nightly digital detox.
+            </p>
           )}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 
-export default Wind
+export default Wind;

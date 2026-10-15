@@ -1,13 +1,15 @@
 "use client";
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { Loader2, Plus } from 'lucide-react';
-import { useSession } from 'next-auth/react';
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Loader2, Minus, Plus, Check } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { PLATFORMS, getPlatformIconPath } from "@/lib/platforms";
+import { formatDuration } from "@/lib/usage";
+import { PageHeader } from "@/components/page-header";
+import { Button } from "@/components/ui/button";
 
-type SocialPlatform = 'Instagram' | 'Facebook' | 'Twitter' | 'TikTok' | 'LinkedIn';
-type Mood = 'Happy' | 'Neutral' | 'Sad' | 'Anxious';
-type ActivityType = 'Browsing' | 'Surfing' | 'Posting' | 'Messaging' | 'Research';
+type Mood = "Happy" | "Neutral" | "Sad" | "Anxious";
+type ActivityType = "Browsing" | "Surfing" | "Posting" | "Messaging" | "Research";
 
 interface ApiLogEntry {
   id: string;
@@ -16,363 +18,307 @@ interface ApiLogEntry {
   mood: string | null;
   activity: string | null;
   wasProductive: string | null;
-  habit: {
-    platform: SocialPlatform;
-  };
+  habit: { platform: string };
 }
+
 interface LogEntry {
   id: string;
   logDate: string;
-  platform: SocialPlatform;
+  platform: string;
   duration: number;
   mood: Mood;
   activity: ActivityType;
   wasProductive: boolean;
 }
 
-interface FormData {
-  logDate: string;
-  platform: SocialPlatform;
-  duration: number;
-  mood: Mood;
-  activity: ActivityType;
-  wasProductive: 'yes' | 'no';
-}
+const todayKey = () => new Date().toISOString().split("T")[0];
+
+const MOODS: Mood[] = ["Happy", "Neutral", "Sad", "Anxious"];
+const ACTIVITIES: ActivityType[] = ["Browsing", "Surfing", "Posting", "Messaging", "Research"];
+
+// Platforms with a real brand icon (LinkedIn has none in /public).
+const PICKABLE = PLATFORMS.filter((p) => p !== "LinkedIn");
 
 const SocialMediaTracker = () => {
   const { data: session } = useSession();
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [formData, setFormData] = useState<FormData>({
-    logDate: new Date().toISOString().split('T')[0],
-    platform: 'Instagram',
-    duration: 0,
-    mood: 'Neutral',
-    activity: 'Browsing',
-    wasProductive: 'yes',
-  });
+  const [platform, setPlatform] = useState<string>(PICKABLE[0]);
+  const [duration, setDuration] = useState(30);
+  const [mood, setMood] = useState<Mood>("Neutral");
+  const [activity, setActivity] = useState<ActivityType>("Browsing");
+  const [wasProductive, setWasProductive] = useState<"yes" | "no">("yes");
+  const [logDate, setLogDate] = useState(todayKey());
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [justLogged, setJustLogged] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchLogs = async () => {
       if (!session?.user?.id) return;
-
       try {
         setIsLoading(true);
-        const response = await fetch('/api/logs');
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch logs');
-        }
-
-        const data: ApiLogEntry[] = await response.json();
-
-        // Transform API data to match our frontend types
-        const typedLogs = data.map((log): LogEntry => ({
-          id: log.id,
-          logDate: new Date(log.logDate).toISOString().split('T')[0],
-          platform: log.habit.platform,
-          duration: log.duration,
-          mood: log.mood as Mood || 'Neutral', // Default to 'Neutral' if null
-          activity: log.activity as ActivityType || 'Browsing', // Default to 'Browsing' if null
-          wasProductive: log.wasProductive === 'yes' // It's stored as "yes"/"no", not a boolean
-        }));
-
-        setLogs(typedLogs);
-      } catch (error) {
-        console.error('Error fetching logs:', error);
-        setError(error instanceof Error ? error.message : 'Failed to load logs');
+        const res = await fetch("/api/logs");
+        if (!res.ok) throw new Error("Failed to fetch logs");
+        const data: ApiLogEntry[] = await res.json();
+        setLogs(
+          data.map((log): LogEntry => ({
+            id: log.id,
+            logDate: new Date(log.logDate).toISOString().split("T")[0],
+            platform: log.habit.platform,
+            duration: log.duration,
+            mood: (log.mood as Mood) || "Neutral",
+            activity: (log.activity as ActivityType) || "Browsing",
+            wasProductive: log.wasProductive === "yes",
+          }))
+        );
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load logs");
       } finally {
         setIsLoading(false);
       }
     };
-
     fetchLogs();
   }, [session]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!session?.user?.id) return;
     setIsSubmitting(true);
     setError(null);
-
-    if (!session?.user?.id) {
-      alert('You must be logged in to log activity.');
-      return;
-    }
+    setJustLogged(false);
 
     try {
-      const response = await fetch('/api/logs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const res = await fetch("/api/logs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ logDate, platform, duration, mood, activity, wasProductive }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to save log');
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to save log");
       }
-
-      const savedLog: ApiLogEntry = await response.json();
-
-      // Transform the saved log to match our frontend type
-      const newLogEntry: LogEntry = {
-        id: savedLog.id,
-        logDate: new Date(savedLog.logDate).toISOString().split('T')[0],
-        platform: savedLog.habit.platform,
-        duration: savedLog.duration,
-        mood: savedLog.mood as Mood || 'Neutral',
-        activity: savedLog.activity as ActivityType || 'Browsing',
-        wasProductive: savedLog.wasProductive === 'yes'
-      };
-
-      setLogs(prev => [newLogEntry, ...prev]);
-
-      // Reset form
-      setFormData({
-        logDate: new Date().toISOString().split('T')[0],
-        platform: 'Instagram',
-        duration: 0,
-        mood: 'Neutral',
-        activity: 'Browsing',
-        wasProductive: 'yes',
-      });
-    } catch (error) {
-      console.error('Error saving log:', error);
-      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      const saved: ApiLogEntry = await res.json();
+      setLogs((prev) => [
+        {
+          id: saved.id,
+          logDate: new Date(saved.logDate).toISOString().split("T")[0],
+          platform: saved.habit.platform,
+          duration: saved.duration,
+          mood: (saved.mood as Mood) || "Neutral",
+          activity: (saved.activity as ActivityType) || "Browsing",
+          wasProductive: saved.wasProductive === "yes",
+        },
+        ...prev,
+      ]);
+      setDuration(0);
+      setJustLogged(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unknown error occurred");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-
-    if (name === 'duration') {
-      if (value === '') {
-        setFormData(prev => ({ ...prev, duration: 0 }));
-        return;
-      }
-      if (!/^\d+$/.test(value)) return;
-    }
-
-    setFormData(prev => ({
-      ...prev,
-      [name]: name === 'duration' ? Number(value) : value,
-    }));
-  };
-
-  const chartData = logs.reduce((acc: { logDate: string; duration: number }[], log) => {
-    const date = new Date(log.logDate).toLocaleDateString();
-    const existing = acc.find(item => item.logDate === date);
-    if (existing) {
-      existing.duration += log.duration;
-    } else {
-      acc.push({ logDate: date, duration: log.duration });
-    }
-    return acc;
-  }, []).sort((a, b) => new Date(a.logDate).getTime() - new Date(b.logDate).getTime());
+  const chip = (active: boolean) =>
+    `rounded-full border px-4 py-1.5 text-sm transition-colors ${
+      active
+        ? "border-amber-400 bg-amber-400/15 text-amber-300"
+        : "border-white/15 bg-white/[0.03] text-gray-300 hover:border-white/30"
+    }`;
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="w-8 h-8 animate-spin" />
+      <div className="flex h-[60vh] items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-amber-400" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-6">
-      {error && (
-        <div className="bg-red-500/15 border border-red-500/30 text-red-300 p-4 rounded-lg mb-4">
-          <p>Error: {error}</p>
-        </div>
-      )}
+    <section className="general">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-8 pb-16">
+        <PageHeader
+          title="Log your day"
+          subtitle="Pick an app, set the minutes, and you're done."
+        />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>HabiTapp Logger</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Date</label>
-                <input
-                  type="date"
-                  name="logDate"
-                  value={formData.logDate}
-                  onChange={handleChange}
-                  className="field"
-                  required
-                />
-              </div>
+        <form onSubmit={handleSubmit} className="panel flex flex-col gap-7">
+          {/* Date */}
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-sm text-gray-400">Logging for</span>
+            <input
+              type="date"
+              value={logDate}
+              onChange={(e) => setLogDate(e.target.value)}
+              className="field max-w-[180px]"
+              required
+            />
+          </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">Platform</label>
-                <select
-                  name="platform"
-                  value={formData.platform}
-                  onChange={handleChange}
-                  className="field"
-                  required
-                >
-                  {['Instagram', 'Facebook', 'Twitter', 'TikTok', 'LinkedIn'].map(platform => (
-                    <option key={platform} value={platform}>{platform}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Time Spent (minutes)</label>
-                <input
-                  type="number"
-                  name="duration"
-                  value={formData.duration}
-                  onChange={handleChange}
-                  className="field"
-                  min="0"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Mood</label>
-                <select
-                  name="mood"
-                  value={formData.mood}
-                  onChange={handleChange}
-                  className="field"
-                >
-                  {['Happy', 'Neutral', 'Sad', 'Anxious'].map(mood => (
-                    <option key={mood} value={mood}>{mood}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Activity Type</label>
-                <select
-                  name="activity"
-                  value={formData.activity}
-                  onChange={handleChange}
-                  className="field"
-                >
-                  {['Browsing', 'Surfing', 'Posting', 'Messaging', 'Research'].map(activity => (
-                    <option key={activity} value={activity}>{activity}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Was it productive?</label>
-                <select
-                  name="wasProductive"
-                  value={formData.wasProductive}
-                  onChange={handleChange}
-                  className="field"
-                >
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
+          {/* Platform tiles */}
+          <div>
+            <span className="label">Which app?</span>
+            <div className="grid grid-cols-4 gap-3">
+              {PICKABLE.map((p) => {
+                const active = platform === p;
+                return (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPlatform(p)}
+                    aria-pressed={active}
+                    className={`flex flex-col items-center gap-2 rounded-xl border p-3 transition-colors ${
+                      active
+                        ? "border-amber-400 bg-amber-400/10"
+                        : "border-white/10 bg-white/[0.03] hover:border-white/25"
+                    }`}
+                  >
+                    <Image src={getPlatformIconPath(p)} alt="" width={28} height={28} />
+                    <span className="text-xs text-white">{p}</span>
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`flex items-center justify-center w-full p-2 bg-[#26252F] text-white rounded hover:bg-[#7e7c96] ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-            >
-              {isSubmitting ? (
-                <span className="flex items-center">
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
-                </span>
-              ) : (
-                <>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Log Activity
-                </>
-              )}
-            </button>
-          </form>
-        </CardContent>
-      </Card>
+          {/* Minutes */}
+          <div>
+            <div className="flex items-center justify-between">
+              <span className="label mb-0">How long?</span>
+              <span className="text-lg font-semibold text-amber-400">
+                {formatDuration(duration)}
+              </span>
+            </div>
+            <div className="mt-3 flex items-center gap-4">
+              <button
+                type="button"
+                aria-label="Decrease minutes"
+                onClick={() => setDuration((d) => Math.max(0, d - 5))}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] text-white transition-colors hover:bg-white/10"
+              >
+                <Minus className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <input
+                type="range"
+                min={0}
+                max={300}
+                step={5}
+                value={duration}
+                onChange={(e) => setDuration(Number(e.target.value))}
+                className="w-full accent-amber-400"
+                aria-label="Minutes spent"
+              />
+              <button
+                type="button"
+                aria-label="Increase minutes"
+                onClick={() => setDuration((d) => Math.min(300, d + 5))}
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/15 bg-white/[0.03] text-white transition-colors hover:bg-white/10"
+              >
+                <Plus className="h-4 w-4" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
 
-      {logs.length > 0 && (
-        <>
-          <Card>
-            <CardHeader>
-              <CardTitle>Usage Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="w-full overflow-x-auto">
-                <LineChart
-                  width={800}
-                  height={400}
-                  data={chartData}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          {/* Mood */}
+          <div>
+            <span className="label">How did it feel?</span>
+            <div className="flex flex-wrap gap-2">
+              {MOODS.map((m) => (
+                <button key={m} type="button" onClick={() => setMood(m)} className={chip(mood === m)}>
+                  {m}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Activity */}
+          <div>
+            <span className="label">What were you doing?</span>
+            <div className="flex flex-wrap gap-2">
+              {ACTIVITIES.map((a) => (
+                <button
+                  key={a}
+                  type="button"
+                  onClick={() => setActivity(a)}
+                  className={chip(activity === a)}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="#4b5563" />
-                  <XAxis dataKey="logDate" tick={{ fill: '#9ca3af' }} stroke="#4b5563" />
-                  <YAxis label={{ value: 'Minutes', angle: -90, position: 'insideLeft', fill: '#9ca3af' }} tick={{ fill: '#9ca3af' }} stroke="#4b5563" />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: '#26252F',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: '0.5rem',
-                      color: '#fff',
-                    }}
-                  />
-                  <Legend wrapperStyle={{ color: '#e5e7eb' }} />
-                  <Line
-                    type="monotone"
-                    dataKey="duration"
-                    stroke="#8884d8"
-                    name="Time Spent (minutes)"
-                  />
-                </LineChart>
-              </div>
-            </CardContent>
-          </Card>
+                  {a}
+                </button>
+              ))}
+            </div>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Logs</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-left">
-                      <th className="p-2">Date</th>
-                      <th className="p-2">Platform</th>
-                      <th className="p-2">Time (min)</th>
-                      <th className="p-2">Mood</th>
-                      <th className="p-2">Activity</th>
-                      <th className="p-2">Productive?</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {logs.map(log => (
-                      <tr key={log.id} className="border-t">
-                        <td className="p-2">{log.logDate}</td>
-                        <td className="p-2">{log.platform}</td>
-                        <td className="p-2">{log.duration}</td>
-                        <td className="p-2">{log.mood}</td>
-                        <td className="p-2">{log.activity}</td>
-                        <td className="p-2">{log.wasProductive ? 'Yes' : 'No'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </div>
+          {/* Productive */}
+          <div>
+            <span className="label">Was it productive?</span>
+            <div className="flex gap-2">
+              {(["yes", "no"] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setWasProductive(v)}
+                  className={chip(wasProductive === v)}
+                >
+                  {v === "yes" ? "Yes, productive" : "Not really"}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {error && (
+            <p className="rounded-lg border border-red-500/30 bg-red-500/15 px-3 py-2 text-sm text-red-300">
+              {error}
+            </p>
+          )}
+
+          {justLogged && (
+            <p className="flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-sm text-amber-200">
+              <Check className="h-4 w-4" aria-hidden="true" /> Logged. Keep the streak going.
+            </p>
+          )}
+
+          <Button type="submit" size="lg" disabled={isSubmitting} className="text-base font-semibold">
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" /> Saving...
+              </>
+            ) : (
+              "Log it"
+            )}
+          </Button>
+        </form>
+
+        {/* Recent logs */}
+        {logs.length > 0 && (
+          <div className="panel">
+            <h2 className="text-xl font-semibold text-white">Recent logs</h2>
+            <ul className="mt-4 divide-y divide-white/10">
+              {logs.slice(0, 8).map((log) => (
+                <li key={log.id} className="flex items-center gap-4 py-3">
+                  <Image
+                    src={getPlatformIconPath(log.platform)}
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="shrink-0"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-white">{log.platform}</p>
+                    <p className="text-xs text-gray-400">
+                      {log.logDate} · {log.mood} · {log.activity}
+                    </p>
+                  </div>
+                  <span className="shrink-0 text-sm font-semibold text-amber-400">
+                    {formatDuration(log.duration)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

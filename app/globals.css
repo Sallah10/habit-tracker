@@ -40,8 +40,8 @@
     --card-foreground: 210 40% 98%;
     --popover: 250 18% 13%;
     --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 250 18% 12%;
+    --primary: 32 95% 55%;
+    --primary-foreground: 250 30% 12%;
     --secondary: 250 14% 20%;
     --secondary-foreground: 210 40% 98%;
     --muted: 250 14% 20%;
@@ -52,7 +52,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 250 14% 22%;
     --input: 250 14% 22%;
-    --ring: 217 91% 60%;
+    --ring: 32 95% 55%;
     --chart-1: 220 70% 60%;
     --chart-2: 160 60% 50%;
     --chart-3: 30 80% 60%;
@@ -71,17 +71,17 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
-  /* Serif headings against the clean sans body - the whole point of the pairing. */
+  /* Rounded display face on headings; body stays Outfit. */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: var(--font-display), Georgia, serif;
+    font-family: var(--font-display), system-ui, sans-serif;
   }
   ::selection {
-    @apply bg-blue-500/40;
+    @apply bg-amber-400/40;
   }
 }
 
@@ -95,15 +95,15 @@
     @apply flex items-center gap-4;
   }
 
-  /* Dark raised surface. Replaces the old light #D9D9D9 panels. */
+  /* Solid raised surface. No blur - keeps it from looking like a template. */
   .panel {
-    @apply rounded-2xl border border-white/10 bg-white/[0.04] p-6 shadow-lg backdrop-blur-sm;
+    @apply rounded-2xl border border-white/10 bg-[#33313f] p-6 shadow-lg;
   }
 
   /* One input style for every form in the app. */
   .field {
     @apply w-full rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-white
-      placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/60
+      placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/60
       focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50;
   }
 
