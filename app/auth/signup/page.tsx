@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/password-input";
 import Hero from "../../hero";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -121,13 +122,13 @@ const Signup = () => {
               <label htmlFor="password" className="label">
                 Password
               </label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="At least 8 characters"
+                autoComplete="new-password"
                 className="field"
               />
             </div>
@@ -135,13 +136,13 @@ const Signup = () => {
               <label htmlFor="confirmPassword" className="label">
                 Confirm password
               </label>
-              <Input
+              <PasswordInput
                 id="confirmPassword"
-                type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 placeholder="Repeat your password"
+                autoComplete="new-password"
                 className="field"
               />
             </div>

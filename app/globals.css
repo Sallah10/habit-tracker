@@ -71,6 +71,15 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+  /* Serif headings against the clean sans body - the whole point of the pairing. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display), Georgia, serif;
+  }
   ::selection {
     @apply bg-blue-500/40;
   }

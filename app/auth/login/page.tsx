@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/password-input";
 import Link from "next/link";
 import google from "/app/assets/google.png";
 import Image from "next/image";
@@ -99,13 +100,13 @@ const Login = () => {
               <label htmlFor="password" className="label">
                 Password
               </label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Your password"
                 required
+                autoComplete="current-password"
                 className="field"
               />
             </div>

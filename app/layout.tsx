@@ -1,13 +1,22 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Fraunces, Outfit } from "next/font/google";
 import "./globals.css";
 import Nav from "./nav";
-import SessionWrapper from "./SessionWrapper"; // Import the SessionWrapper
+import SessionWrapper from "./SessionWrapper";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
 
-const sans = Plus_Jakarta_Sans({
+const sans = Outfit({
   variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Variable serif for headings. SOFT + WONK axes give it actual personality
+// instead of the usual geometric-sans "startup" look.
+const display = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+  axes: ["SOFT", "WONK", "opsz"],
   display: "swap",
 });
 
@@ -35,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${sans.variable} antialiased`}>
+      <body className={`${sans.variable} ${display.variable} antialiased`}>
         <SessionWrapper> {/* Wrap the entire layout in SessionWrapper */}
           <Nav />
           {children}
