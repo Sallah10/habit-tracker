@@ -12,13 +12,6 @@ const font = Baloo_Tamma_2({
   display: "swap",
 });
 
-const display = Baloo_Tamma_2({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "HabiTapp - Social Media Habit Tracker",
   description: "Track your social media habits, keep your streak alive and take your time back.",
@@ -42,8 +35,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${font.variable} ${display.variable} antialiased`}>
+    <html lang="en" className={`dark ${font.variable}`}>
+      <body className="antialiased">
         <SessionWrapper>
           <Nav />
           {children}

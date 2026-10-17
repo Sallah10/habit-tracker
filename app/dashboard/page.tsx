@@ -107,7 +107,7 @@ const Dashboard = async () => {
         <div className="panel flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2 text-sm font-medium text-gray-300">
-              <Timer className="h-4 w-4 text-amber-400" aria-hidden="true" />
+              <Timer className="h-4 w-4 text-brand" aria-hidden="true" />
               Today so far
             </div>
             <p className="mt-2 text-4xl font-bold">
@@ -118,7 +118,7 @@ const Dashboard = async () => {
             </p>
             <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-white/10">
               <div
-                className={`h-full rounded-full ${overGoal ? "bg-red-400" : "bg-amber-400"}`}
+                className={`h-full rounded-full ${overGoal ? "bg-red-400" : "bg-brand"}`}
                 style={{ width: `${goalProgress}%` }}
               />
             </div>
@@ -141,7 +141,7 @@ const Dashboard = async () => {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {stats.map(({ icon: Icon, label, value, unit, accent }) => (
             <div key={label} className="panel flex flex-col gap-1 p-4">
-              <Icon className={`h-5 w-5 ${accent ? "text-amber-400" : "text-gray-400"}`} aria-hidden="true" />
+              <Icon className={`h-5 w-5 ${accent ? "text-brand" : "text-gray-400"}`} aria-hidden="true" />
               <span className="mt-1 text-2xl font-bold">
                 {value}
                 {unit ? <span className="ml-1 text-sm font-normal text-gray-400">{unit}</span> : null}
@@ -178,7 +178,7 @@ const Dashboard = async () => {
                     </div>
                     <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/10">
                       <div
-                        className={`h-full rounded-full ${over ? "bg-red-400" : "bg-amber-400"}`}
+                        className={`h-full rounded-full ${over ? "bg-red-400" : "bg-brand"}`}
                         style={{ width: `${pct}%` }}
                       />
                     </div>
@@ -193,7 +193,7 @@ const Dashboard = async () => {
         <div className="panel">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold">Last 14 days</h2>
-            <Link href="/dashboard/mostusedapp" className="text-sm text-amber-400 hover:underline">
+            <Link href="/dashboard/mostusedapp" className="text-sm text-brand hover:underline">
               See insights
             </Link>
           </div>
@@ -206,23 +206,23 @@ const Dashboard = async () => {
         <div className="grid gap-4 sm:grid-cols-2">
           <Link
             href="/dashboard/focus"
-            className="panel flex items-center justify-between transition-colors hover:border-amber-400/40"
+            className="panel flex items-center justify-between transition-colors hover:border-brand/40"
           >
             <div>
               <p className="font-semibold">Focus Mode</p>
-              <p className="mt-1 text-sm text-gray-400">Block distracting apps for a set time.</p>
+              <p className="mt-1 text-sm text-gray-400">Run a countdown focus session.</p>
             </div>
-            <ArrowRight className="h-5 w-5 text-amber-400" aria-hidden="true" />
+            <ArrowRight className="h-5 w-5 text-brand" aria-hidden="true" />
           </Link>
           <Link
             href="/dashboard/mostusedapp"
-            className="panel flex items-center justify-between transition-colors hover:border-amber-400/40"
+            className="panel flex items-center justify-between transition-colors hover:border-brand/40"
           >
             <div>
               <p className="font-semibold">Insights</p>
               <p className="mt-1 text-sm text-gray-400">Where your time actually goes.</p>
             </div>
-            <ArrowRight className="h-5 w-5 text-amber-400" aria-hidden="true" />
+            <ArrowRight className="h-5 w-5 text-brand" aria-hidden="true" />
           </Link>
         </div>
       </div>

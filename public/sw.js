@@ -1,10 +1,10 @@
 // public/sw.js
-// Small hand-rolled service worker: static assets come from cache, pages try the
-// network first so you always see fresh data. API calls are never cached.
-const CACHE = 'habitapp-v1';
+// Deliberately minimal. HTML pages are NEVER cached: this is an auth-gated app,
+// and serving a stale page (or a logged-out shell to a logged-in user) causes
+// far worse bugs than being offline. We only cache static assets. API is never
+// cached either. Bump CACHE when this file changes so old workers are replaced.
+const CACHE = 'habitapp-v2';
 const PRECACHE = [
-  '/',
-  '/auth/login',
   '/manifest.webmanifest',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
@@ -29,21 +29,22 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Only same-origin GETs, and never the API
-  if (request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/')) {
+  // Only same-origin GETs.
+  if (request.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
-  // Pages: network first, fall back to whatever we cached
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request).catch(() => caches.match(request).then((hit) => hit || caches.match('/')))
-    );
+  // Never touch API calls, and never cache/inject HTML navigations.
+  if (url.pathname.startsWith('/api/') || request.mode === 'navigate') {
     return;
   }
 
-  // Static assets: cache first
-  if (url.pathname.startsWith('/_next/static/') || url.pathname.startsWith('/icons/') || url.pathname.startsWith('/default/')) {
+  // Static assets: cache first, then network (and remember it).
+  if (
+    url.pathname.startsWith('/_next/static/') ||
+    url.pathname.startsWith('/icons/') ||
+    url.pathname.startsWith('/default/')
+  ) {
     event.respondWith(
       caches.match(request).then((hit) => hit || fetch(request).then((response) => {
         const copy = response.clone();

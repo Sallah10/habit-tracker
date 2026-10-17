@@ -3,7 +3,6 @@ import React from "react";
 import Hero from "../../hero";
 import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,7 +16,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   // NextAuth bounces back to this page with ?error=... when OAuth fails.
   // Read it off the URL so Google misconfiguration isn't a silent failure.
@@ -46,6 +44,7 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setError("");
     setLoading(true);
 
@@ -55,13 +54,21 @@ const Login = () => {
       password,
     });
 
-    setLoading(false);
-
     if (result?.error) {
       setError("Invalid email or password");
-    } else {
-      router.push("/dashboard");
+      setLoading(false);
+      return;
     }
+
+    // Do a full navigation instead of a client-side push. The session cookie is
+    // already set, so a real page load always lands logged-in - no race where
+    // the router gets stuck on this page while you're actually signed in.
+    const callbackUrl = new URLSearchParams(window.location.search).get("callbackUrl");
+    const safeUrl =
+      callbackUrl && callbackUrl.startsWith("/") && !callbackUrl.startsWith("//")
+        ? callbackUrl
+        : "/dashboard";
+    window.location.assign(safeUrl);
   };
 
   const handleGoogleSignIn = async () => {

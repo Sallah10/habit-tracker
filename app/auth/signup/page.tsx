@@ -60,8 +60,9 @@ const Signup = () => {
         router.push("/auth/login");
         return;
       }
-      router.push("/onboarding");
-      router.refresh();
+
+      // Full navigation so the fresh session cookie is always picked up.
+      window.location.assign("/onboarding");
     } catch (err) {
       setError(`Network error. Please try again. ${err}`);
       setLoading(false);

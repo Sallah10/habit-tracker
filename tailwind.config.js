@@ -18,9 +18,15 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['var(--font-display)', 'Georgia', 'serif'],
+        display: ['var(--font-sans)', 'Georgia', 'serif'],
       },
       colors: {
+        brand: {
+          DEFAULT: "#FF6F61",
+          foreground: "#26252F",
+          soft: "#FF8A7D",
+          tint: "#FFD5CE",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

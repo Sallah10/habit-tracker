@@ -36,23 +36,23 @@ const Focus = async () => {
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 pb-16">
         <PageHeader
           title="Focus Mode"
-          subtitle="Block distracting apps and keep your attention where you want it."
+          subtitle="Set a countdown, pick the apps you want to stay off, and keep yourself honest."
         />
         <FocusMode platformData={platformData} />
         <Link
           href="/dashboard/winddown"
-          className="panel flex items-center justify-between transition-colors hover:border-amber-400/40"
+          className="panel flex items-center justify-between transition-colors hover:border-brand/40"
         >
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/15">
-              <Moon className="h-5 w-5 text-amber-400" aria-hidden="true" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15">
+              <Moon className="h-5 w-5 text-brand" aria-hidden="true" />
             </span>
             <div>
               <p className="font-semibold text-white">Wind Down</p>
               <p className="text-sm text-gray-400">Schedule a nightly digital detox.</p>
             </div>
           </div>
-          <ArrowRight className="h-5 w-5 text-amber-400" aria-hidden="true" />
+          <ArrowRight className="h-5 w-5 text-brand" aria-hidden="true" />
         </Link>
       </div>
     </section>

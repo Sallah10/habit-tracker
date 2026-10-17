@@ -16,7 +16,28 @@ A full-stack habit tracker for the one habit everyone lies about: **time spent o
 - **Insights** - see where your time goes, ranked by platform.
 - **Focus mode** - pick apps and run a real countdown session; link to Wind Down for a nightly schedule.
 - **Tracker** - quick log + recent history.
-- **Installable (PWA)** - add it to your home screen; a small service worker keeps the shell available offline.
+- **Installable (PWA)** - add it to your home screen from the browser. Opens fullscreen, no app store, and static assets are cached so it loads instantly.
+
+## Install it as an app (PWA)
+
+HabiTapp is a progressive web app, so you don't need an app store - it installs from the browser and then behaves like a native app (own icon, fullscreen, one tap away).
+
+- **Android (Chrome):** open the site, then menu **⋮ → Add to Home screen**. The landing page also shows an **Install HabiTapp** button when your browser supports it.
+- **iPhone/iPad (Safari):** tap **Share**, then **Add to Home Screen**. (iOS doesn't fire the install button, so this is the way.)
+- **Desktop (Chrome/Edge):** click the **install icon** in the address bar.
+
+Once installed it opens with no browser chrome, and static assets are cached so it loads instantly. It is **not** an offline app - HTML pages and API calls are never cached, so logging needs a connection (by design: it keeps auth and data honest).
+
+## How it works (and what it doesn't)
+
+HabiTapp is **fully manual**. There is no automatic screen-time tracking, no platform APIs and no background monitoring - you tell it how long you spent and it does the maths.
+
+- **You log your usage yourself**, on purpose. The daily ritual is the point: a number you write down is harder to ignore than one a system reported on your behalf.
+- **Privacy is the feature, not a limitation.** Because HabiTapp connects to nothing, there's no screen-time feed, no linked accounts and no background access to leak - the only data stored is what you type in.
+- **Focus Mode is a countdown timer, not a blocker.** It doesn't restrict apps on your device - it's a commitment device to keep you honest.
+- **Wind Down is a plan/reminder**, not an enforced do-not-disturb schedule.
+- **Streaks** count consecutive days (UTC) with at least one log. Log nothing and the streak resets.
+- The **in-app demo account** is pre-seeded with 31 days of generated data so the charts and streak look alive without you entering anything.
 
 ## Tech stack
 
@@ -71,7 +92,7 @@ app/
   onboarding/              # first-run setup page
   dashboard/               # dashboard hub + insights + focus + winddown
   tracker/                 # fast logging page
-  nav.tsx                  # auth-aware nav (amber accent)
+  nav.tsx                  # auth-aware nav (coral accent)
 lib/
   prisma.ts                # single PrismaClient
   streaks.ts               # pure streak maths (unit tested)
@@ -80,7 +101,7 @@ lib/
 middleware.ts              # protects /dashboard, /tracker, /onboarding
 ```
 
-Every page that reads the database is a React Server Component; the interactive bits are small `"use client"` leaves fed typed props. The UI is dark-first, warm (amber) accent and uses Baloo Tamma 2 + Outfit.
+Every page that reads the database is a React Server Component; the interactive bits are small `"use client"` leaves fed typed props. The UI is dark-first, warm coral accent and uses Baloo Tamma 2 throughout.
 
 ## Security notes
 

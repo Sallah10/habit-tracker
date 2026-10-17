@@ -121,16 +121,16 @@ const SocialMediaTracker = () => {
   };
 
   const chip = (active: boolean) =>
-    `rounded-full border px-4 py-1.5 text-sm transition-colors ${
+    `rounded-full border px-4 py-2 text-sm transition-colors ${
       active
-        ? "border-amber-400 bg-amber-400/15 text-amber-300"
+        ? "border-brand bg-brand/15 text-brand-tint"
         : "border-white/15 bg-white/[0.03] text-gray-300 hover:border-white/30"
     }`;
 
   if (isLoading) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-amber-400" />
+        <Loader2 className="h-8 w-8 animate-spin text-brand" />
       </div>
     );
   }
@@ -170,7 +170,7 @@ const SocialMediaTracker = () => {
                     aria-pressed={active}
                     className={`flex flex-col items-center gap-2 rounded-xl border p-3 transition-colors ${
                       active
-                        ? "border-amber-400 bg-amber-400/10"
+                        ? "border-brand bg-brand/10"
                         : "border-white/10 bg-white/[0.03] hover:border-white/25"
                     }`}
                   >
@@ -186,7 +186,7 @@ const SocialMediaTracker = () => {
           <div>
             <div className="flex items-center justify-between">
               <span className="label mb-0">How long?</span>
-              <span className="text-lg font-semibold text-amber-400">
+              <span className="text-lg font-semibold text-brand">
                 {formatDuration(duration)}
               </span>
             </div>
@@ -206,7 +206,7 @@ const SocialMediaTracker = () => {
                 step={5}
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
-                className="w-full accent-amber-400"
+                className="w-full accent-brand"
                 aria-label="Minutes spent"
               />
               <button
@@ -273,7 +273,7 @@ const SocialMediaTracker = () => {
           )}
 
           {justLogged && (
-            <p className="flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/10 px-3 py-2 text-sm text-amber-200">
+            <p className="flex items-center gap-2 rounded-lg border border-brand/30 bg-brand/10 px-3 py-2 text-sm text-brand-tint">
               <Check className="h-4 w-4" aria-hidden="true" /> Logged. Keep the streak going.
             </p>
           )}
@@ -309,7 +309,7 @@ const SocialMediaTracker = () => {
                       {log.logDate} · {log.mood} · {log.activity}
                     </p>
                   </div>
-                  <span className="shrink-0 text-sm font-semibold text-amber-400">
+                  <span className="shrink-0 text-sm font-semibold text-brand">
                     {formatDuration(log.duration)}
                   </span>
                 </li>

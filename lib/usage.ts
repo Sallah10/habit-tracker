@@ -11,11 +11,14 @@ export type PlatformUsage = {
 };
 
 export function getPlatformUsage(logs: LogWithHabit[]): PlatformUsage[] {
-  const totals = logs.reduce((acc, log) => {
-    const platform = log.habit?.platform || 'Unknown';
-    acc[platform] = (acc[platform] || 0) + log.duration;
-    return acc;
-  }, {} as Record<string, number>);
+  const totals = logs.reduce(
+    (acc, log) => {
+      const platform = log.habit?.platform || "Unknown";
+      acc[platform] = (acc[platform] || 0) + log.duration;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   return Object.entries(totals)
     .map(([platform, duration]) => ({ platform, duration }))
@@ -29,5 +32,5 @@ export function getTotalMinutes(logs: LogWithHabit[]): number {
 export function formatDuration(totalMinutes: number): string {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+  return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
 }

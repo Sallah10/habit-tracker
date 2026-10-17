@@ -40,7 +40,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 250 18% 13%;
     --popover-foreground: 210 40% 98%;
-    --primary: 32 95% 55%;
+    --primary: 5 100% 69%;
     --primary-foreground: 250 30% 12%;
     --secondary: 250 14% 20%;
     --secondary-foreground: 210 40% 98%;
@@ -52,7 +52,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 250 14% 22%;
     --input: 250 14% 22%;
-    --ring: 32 95% 55%;
+    --ring: 5 100% 69%;
     --chart-1: 220 70% 60%;
     --chart-2: 160 60% 50%;
     --chart-3: 30 80% 60%;
@@ -69,7 +69,7 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased font-sans;
   }
   /* Use the same rounded font for all text */
   h1,
@@ -81,7 +81,7 @@
     font-family: var(--font-sans), system-ui, sans-serif;
   }
   ::selection {
-    @apply bg-amber-400/40;
+    @apply bg-brand/40;
   }
 }
 
@@ -103,7 +103,7 @@
   /* One input style for every form in the app. */
   .field {
     @apply w-full rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2 text-white
-      placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-400/60
+      placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-brand/60
       focus:border-transparent disabled:cursor-not-allowed disabled:opacity-50;
   }
 

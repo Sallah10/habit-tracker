@@ -64,14 +64,14 @@ const Onboarding = () => {
 
   return (
     <section className="general min-h-screen items-center justify-center">
-      <div className="w-full max-w-xl rounded-3xl border border-white/10 bg-[#33313f] p-8 shadow-2xl">
+      <div className="w-full max-w-xl rounded-3xl border border-white/10 bg-[#33313f] p-6 shadow-2xl sm:p-8">
         {/* Progress */}
         <div className="mb-8 flex items-center justify-center gap-2">
           {[0, 1, 2].map((i) => (
             <span
               key={i}
               className={`h-1.5 rounded-full transition-all ${
-                i <= step ? "w-10 bg-amber-400" : "w-6 bg-white/15"
+                i <= step ? "w-10 bg-brand" : "w-6 bg-white/15"
               }`}
             />
           ))}
@@ -85,7 +85,8 @@ const Onboarding = () => {
             </h1>
             <p className="mx-auto mt-3 max-w-sm text-gray-300">
               Let&apos;s set up your tracker. Two quick questions, then you&apos;re
-              logging your first day.
+              logging your first day. You log your usage yourself - it takes about
+              ten seconds a day.
             </p>
             <Button
               size="lg"
@@ -118,12 +119,12 @@ const Onboarding = () => {
                     aria-pressed={active}
                     className={`relative flex flex-col items-center gap-2 rounded-2xl border p-4 transition-colors ${
                       active
-                        ? "border-amber-400 bg-amber-400/10"
+                        ? "border-brand bg-brand/10"
                         : "border-white/10 bg-white/[0.03] hover:border-white/25"
                     }`}
                   >
                     {active && (
-                      <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-400">
+                      <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-brand">
                         <Check className="h-3 w-3 text-[#26252F]" aria-hidden="true" />
                       </span>
                     )}
@@ -182,7 +183,7 @@ const Onboarding = () => {
                       />
                       {platform}
                     </span>
-                    <span className="text-sm font-semibold text-amber-400">
+                    <span className="text-sm font-semibold text-brand">
                       {goalFor(platform)} min / day
                     </span>
                   </div>
@@ -193,7 +194,7 @@ const Onboarding = () => {
                     step={5}
                     value={goalFor(platform)}
                     onChange={(e) => setGoal(platform, Number(e.target.value))}
-                    className="mt-2 w-full accent-amber-400"
+                    className="mt-2 w-full accent-brand"
                     aria-label={`${platform} daily goal in minutes`}
                   />
                 </div>

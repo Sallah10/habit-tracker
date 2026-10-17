@@ -23,8 +23,8 @@ const Wind = () => {
         <div className="panel flex flex-col gap-8">
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-400/15">
-                <Moon className="h-5 w-5 text-amber-400" aria-hidden="true" />
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand/15">
+                <Moon className="h-5 w-5 text-brand" aria-hidden="true" />
               </span>
               <div>
                 <h2 className="text-lg font-semibold text-white">Enable Wind Down</h2>
@@ -83,8 +83,10 @@ const Wind = () => {
                     </div>
                   </div>
 
-                  <p className="rounded-lg border border-amber-400/25 bg-amber-400/10 px-4 py-3 text-sm text-amber-200">
-                    Your schedule will activate every night during this window.
+                  <p className="rounded-lg border border-brand/25 bg-brand/10 px-4 py-3 text-sm text-brand-tint">
+                    This is your plan for the night. HabiTapp doesn&apos;t block
+                    anything on your device - it just reminds you of the window you
+                    set.
                   </p>
                 </div>
               </motion.div>

@@ -13,7 +13,7 @@ import {
 const chartConfig = {
   minutes: {
     label: "Minutes",
-    color: "#fbbf24",
+    color: "#FF6F61",
   },
 } satisfies ChartConfig
 

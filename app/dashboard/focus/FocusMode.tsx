@@ -114,7 +114,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                   value={sessionDuration}
                   onChange={(e) => setSessionDuration(Number(e.target.value))}
                   disabled={isRunning}
-                  className="w-full max-w-xs accent-amber-400"
+                  className="w-full max-w-xs accent-brand"
                 />
                 <span className="text-xl font-medium mt-2">
                   {sessionDuration} minutes
@@ -124,7 +124,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
               {/* App Selection */}
               <div>
                 <h2 className="text-xl mb-4 text-center">
-                  Select apps to block during focus:
+                  Pick the apps you want to stay off:
                 </h2>
                 {apps.length === 0 ? (
                   <p className="text-center text-gray-300">
@@ -143,7 +143,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                         whileTap={{ scale: 0.95 }}
                         onClick={() => !isRunning && toggleApp(app.id)}
                         className={`flex flex-col items-center p-3 rounded-xl cursor-pointer transition-all border ${selectedApps.includes(app.id)
-                          ? 'bg-amber-400/20 border-amber-400/60 shadow-inner'
+                          ? 'bg-brand/20 border-brand/60 shadow-inner'
                           : 'bg-white/[0.06] border-white/10 hover:bg-white/10 shadow-md'
                           }`}
                       >
@@ -206,7 +206,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
                       disabled={selectedApps.length === 0}
                       className={`px-6 py-3 rounded-full text-lg font-semibold shadow-lg ${selectedApps.length === 0
                         ? 'bg-gray-600 cursor-not-allowed text-white'
-                        : 'bg-amber-400 text-[#26252F]'
+                        : 'bg-brand text-[#26252F]'
                         }`}
                     >
                       Start Focus Session
@@ -216,7 +216,7 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
 
                 {isRunning && (
                   <p className="text-sm text-gray-400">
-                    Blocking {selectedApps.length} app{selectedApps.length === 1 ? '' : 's'} until the timer ends
+                    Staying off {selectedApps.length} app{selectedApps.length === 1 ? '' : 's'} until the timer ends
                   </p>
                 )}
               </motion.div>
@@ -230,10 +230,11 @@ const FocusMode = ({ platformData = [] }: { platformData?: PlatformUsage[] }) =>
             exit={{ opacity: 0 }}
           >
             <motion.p className="text-xl md:text-2xl mb-6">
-              Block distracting apps when you need to focus
+              Commit to a focused stretch without your distracting apps
             </motion.p>
             <motion.p className="text-gray-400">
-              Your most used apps will be suggested when enabled
+              It&apos;s a countdown to keep you honest - it doesn&apos;t block apps
+              on your device.
             </motion.p>
           </motion.div>
         )}

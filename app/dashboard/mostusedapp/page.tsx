@@ -70,7 +70,7 @@ const Insights = async () => {
                       </span>
                     </div>
                     <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-white/10">
-                      <div className="h-full rounded-full bg-amber-400" style={{ width: `${pct}%` }} />
+                      <div className="h-full rounded-full bg-brand" style={{ width: `${pct}%` }} />
                     </div>
                   </div>
                 </div>
