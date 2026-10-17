@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Loader2, Minus, Plus, Check } from "lucide-react";
+import { Loader2, Minus, Plus } from "lucide-react";
+import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { PLATFORMS, getPlatformIconPath } from "@/lib/platforms";
 import { formatDuration } from "@/lib/usage";
@@ -50,7 +51,6 @@ const SocialMediaTracker = () => {
   const [wasProductive, setWasProductive] = useState<"yes" | "no">("yes");
   const [logDate, setLogDate] = useState(todayKey());
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [justLogged, setJustLogged] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -86,7 +86,6 @@ const SocialMediaTracker = () => {
     if (!session?.user?.id) return;
     setIsSubmitting(true);
     setError(null);
-    setJustLogged(false);
 
     try {
       const res = await fetch("/api/logs", {
@@ -112,9 +111,11 @@ const SocialMediaTracker = () => {
         ...prev,
       ]);
       setDuration(0);
-      setJustLogged(true);
+      toast.success("Logged. Keep the streak going.");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred");
+      const message = err instanceof Error ? err.message : "An unknown error occurred";
+      setError(message);
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -151,6 +152,17 @@ const SocialMediaTracker = () => {
               type="date"
               value={logDate}
               onChange={(e) => setLogDate(e.target.value)}
+              min={(() => {
+                const d = new Date();
+                d.setUTCDate(d.getUTCDate() - 6);
+                d.setUTCHours(0, 0, 0, 0);
+                return d.toISOString().split('T')[0];
+              })()}
+              max={(() => {
+                const d = new Date();
+                d.setUTCHours(0, 0, 0, 0);
+                return d.toISOString().split('T')[0];
+              })()}
               className="field max-w-[180px]"
               required
             />
@@ -269,12 +281,6 @@ const SocialMediaTracker = () => {
           {error && (
             <p className="rounded-lg border border-red-500/30 bg-red-500/15 px-3 py-2 text-sm text-red-300">
               {error}
-            </p>
-          )}
-
-          {justLogged && (
-            <p className="flex items-center gap-2 rounded-lg border border-brand/30 bg-brand/10 px-3 py-2 text-sm text-brand-tint">
-              <Check className="h-4 w-4" aria-hidden="true" /> Logged. Keep the streak going.
             </p>
           )}
 

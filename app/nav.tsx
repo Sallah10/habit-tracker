@@ -8,6 +8,8 @@ import openmenu from "/app/assets/icon-menu.svg";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import { avatarColor, initials } from "@/lib/avatar";
 
 // The signed-in destinations. Dashboard is home base; the rest hang off it.
 const appLinks = [
@@ -64,24 +66,43 @@ const Nav = () => {
                     {label}
                   </Link>
                 ))}
+                <Link href="/help" className={linkClass("/help")}>
+                  Help
+                </Link>
                 <span className="h-5 w-px bg-white/15" aria-hidden="true" />
-                <span className="flex items-center gap-2 text-md text-white/70">
-                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand text-xs font-bold text-[#26252F]">
-                    {(session?.user?.name?.[0] || "U").toUpperCase()}
+                <Link
+                  href="/dashboard/settings"
+                  className="flex items-center gap-2 text-md text-white/80 transition-colors hover:text-white"
+                  aria-label="Account settings"
+                >
+                  <span
+                    className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-[#26252F]"
+                    style={{ backgroundColor: avatarColor(session?.user?.email) }}
+                    aria-hidden="true"
+                  >
+                    {initials(session?.user?.name)}
                   </span>
                   {session?.user?.name?.split(" ")[0] || "You"}
-                </span>
-                <button
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                  className="text-md font-medium text-white/80 transition-colors hover:text-white"
-                >
-                  Log out
-                </button>
+                </Link>
+                <ConfirmDialog
+                  title="Log out?"
+                  description="You'll need to sign in again to keep your streak going."
+                  confirmLabel="Log out"
+                  onConfirm={() => signOut({ callbackUrl: "/" })}
+                  trigger={
+                    <button className="text-md font-medium text-white/80 transition-colors hover:text-white">
+                      Log out
+                    </button>
+                  }
+                />
               </>
             ) : (
               <>
                 <Link href="/#how" className="text-md font-medium text-white/80 transition-colors hover:text-white">
                   How it works
+                </Link>
+                <Link href="/help" className="text-md font-medium text-white/80 transition-colors hover:text-white">
+                  Help
                 </Link>
                 <Link href="/auth/login" className="text-md font-medium text-white/80 transition-colors hover:text-white">
                   Log in
@@ -136,17 +157,39 @@ const Nav = () => {
                   {label}
                 </Link>
               ))}
-              <button
-                onClick={() => signOut({ callbackUrl: "/" })}
-                className="text-white/80 transition-colors hover:text-white"
+              <Link
+                href="/help"
+                className={linkClass("/help")}
+                onClick={() => setMenuOpen(false)}
               >
-                Log out
-              </button>
+                Help
+              </Link>
+              <Link
+                href="/dashboard/settings"
+                className="text-white/80 transition-colors hover:text-white"
+                onClick={() => setMenuOpen(false)}
+              >
+                Settings
+              </Link>
+              <ConfirmDialog
+                title="Log out?"
+                description="You'll need to sign in again to keep your streak going."
+                confirmLabel="Log out"
+                onConfirm={() => signOut({ callbackUrl: "/" })}
+                trigger={
+                  <button className="text-white/80 transition-colors hover:text-white">
+                    Log out
+                  </button>
+                }
+              />
             </>
           ) : (
             <>
               <Link href="/#how" className="text-white/80 transition-colors hover:text-white" onClick={() => setMenuOpen(false)}>
                 How it works
+              </Link>
+              <Link href="/help" className="text-white/80 transition-colors hover:text-white" onClick={() => setMenuOpen(false)}>
+                Help
               </Link>
               <Link href="/auth/login" className="text-white/80 transition-colors hover:text-white" onClick={() => setMenuOpen(false)}>
                 Log in

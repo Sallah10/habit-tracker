@@ -2,6 +2,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Moon } from 'lucide-react';
+import Link from 'next/link';
 import { Switch } from '@/components/ui/switch';
 import { PageHeader } from '@/components/page-header';
 
@@ -19,6 +20,13 @@ const Wind = () => {
           backHref="/dashboard/focus"
           backLabel="Focus"
         />
+
+        <Link
+          href="/help#winddown"
+          className="-mt-4 self-start text-sm text-gray-400 transition-colors hover:text-brand"
+        >
+          What is Wind Down? →
+        </Link>
 
         <div className="panel flex flex-col gap-8">
           <div className="flex w-full items-center justify-between">

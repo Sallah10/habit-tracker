@@ -38,6 +38,12 @@ const Focus = async () => {
           title="Focus Mode"
           subtitle="Set a countdown, pick the apps you want to stay off, and keep yourself honest."
         />
+        <Link
+          href="/help#focus"
+          className="-mt-4 text-sm text-gray-400 transition-colors hover:text-brand"
+        >
+          What does Focus Mode actually do? →
+        </Link>
         <FocusMode platformData={platformData} />
         <Link
           href="/dashboard/winddown"

@@ -224,6 +224,26 @@ const Dashboard = async () => {
             </div>
             <ArrowRight className="h-5 w-5 text-brand" aria-hidden="true" />
           </Link>
+          <Link
+            href="/dashboard/settings"
+            className="panel flex items-center justify-between transition-colors hover:border-brand/40"
+          >
+            <div>
+              <p className="font-semibold">Settings</p>
+              <p className="mt-1 text-sm text-gray-400">Name, goals and password.</p>
+            </div>
+            <ArrowRight className="h-5 w-5 text-brand" aria-hidden="true" />
+          </Link>
+          <Link
+            href="/help"
+            className="panel flex items-center justify-between transition-colors hover:border-brand/40"
+          >
+            <div>
+              <p className="font-semibold">Help</p>
+              <p className="mt-1 text-sm text-gray-400">What all of this actually means.</p>
+            </div>
+            <ArrowRight className="h-5 w-5 text-brand" aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </section>

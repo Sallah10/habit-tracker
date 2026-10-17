@@ -35,10 +35,10 @@ describe('getTotalMinutes', () => {
 
 describe('formatDuration', () => {
   it('formats hours and minutes', () => {
-    expect(formatDuration(90)).toBe('1h 30m');
+    expect(formatDuration(90)).toBe('1h 30min');
   });
 
   it('drops the hours when there are none', () => {
-    expect(formatDuration(45)).toBe('45m');
+    expect(formatDuration(45)).toBe('45min');
   });
 });

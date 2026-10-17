@@ -4,6 +4,7 @@ import "./globals.css";
 import Nav from "./nav";
 import SessionWrapper from "./SessionWrapper";
 import ServiceWorkerRegister from "./ServiceWorkerRegister";
+import { Toaster } from "@/components/toaster";
 
 const font = Baloo_Tamma_2({
   variable: "--font-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
           <Nav />
           {children}
           <ServiceWorkerRegister />
+          <Toaster />
         </SessionWrapper>
       </body>
     </html>

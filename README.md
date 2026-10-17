@@ -11,11 +11,14 @@ A full-stack habit tracker for the one habit everyone lies about: **time spent o
 ## What it does
 
 - **Auth** - email + password (bcrypt hashed) or Google OAuth, sessions via NextAuth. New accounts go through a short onboarding (pick platforms + set goals).
-- **Dashboard** - today's status, streaks, per-platform goals, last-14-day trend, and quick links to Insights and Focus.
+- **Dashboard** - today's status, streaks, per-platform goals, last-14-day trend, and quick links to Insights, Focus, Settings and Help.
 - **Log your usage** - fast, tactile form to log minutes, mood, activity and whether it was productive.
 - **Insights** - see where your time goes, ranked by platform.
 - **Focus mode** - pick apps and run a real countdown session; link to Wind Down for a nightly schedule.
 - **Tracker** - quick log + recent history.
+- **Settings** (`/dashboard/settings`) - edit your display name, daily goals per app, and change (or set) your password. Deleting your account lives here, behind a type-confirmation.
+- **Help** (`/help`) - a plain-English glossary of every term (Logging, Streak, Insights, Focus Mode, Wind Down, Privacy) so nothing in the app is jargon.
+- **Feedback** - toasts for everything that matters (log saved, settings saved, password changed, errors) and confirmation dialogs for anything destructive (log out, delete account).
 - **Installable (PWA)** - add it to your home screen from the browser. Opens fullscreen, no app store, and static assets are cached so it loads instantly.
 
 ## Install it as an app (PWA)
@@ -47,6 +50,7 @@ HabiTapp is **fully manual**. There is no automatic screen-time tracking, no pla
 | Auth | NextAuth v4 (JWT strategy, Credentials + Google) |
 | Database | PostgreSQL via Prisma 6 (with migrations) |
 | Styling | Tailwind CSS + shadcn/ui (Radix) |
+| Feedback | sonner (toasts) + Radix AlertDialog (confirmations) |
 | Charts | Recharts |
 | Motion | Framer Motion |
 | Testing | Vitest (unit) + a Node end-to-end smoke script |

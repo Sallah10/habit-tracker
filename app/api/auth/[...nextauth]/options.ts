@@ -69,16 +69,24 @@ export const authOptions: NextAuthOptions = {
       }
       return true;
     },
-    async jwt({ token, user}) {
+    async jwt({ token, user, trigger, session }) {
       // Initial sign in
       if (user) {
         token.id = user.id;
+      }
+      // The settings page can push a new name onto the session without a
+      // full re-login; fold it into the token so the nav updates.
+      if (trigger === "update" && session?.name) {
+        token.name = session.name as string;
       }
       return token;
     },
     async session({ session, token }) {
       if (token?.id) {
         session.user.id = token.id as string;
+      }
+      if (typeof token.name === "string") {
+        session.user.name = token.name;
       }
       return session;
     },

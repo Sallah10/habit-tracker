@@ -71,6 +71,35 @@ export async function POST(req: Request) {
       );
     }
 
+    // Backfill only within the last 7 days. Block future dates.
+    const now = new Date();
+    const inputDate = new Date(logDate);
+    if (Number.isNaN(inputDate.getTime())) {
+      return NextResponse.json(
+        { error: 'Please pick a valid date' },
+        { status: 400 }
+      );
+    }
+
+    const todayStartUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    const inputStartUTC = new Date(Date.UTC(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), inputDate.getUTCDate()));
+
+    if (inputStartUTC > todayStartUTC) {
+      return NextResponse.json(
+        { error: "You can't log a future date" },
+        { status: 400 }
+      );
+    }
+
+    const maxBack = new Date(todayStartUTC);
+    maxBack.setUTCDate(maxBack.getUTCDate() - 6);
+    if (inputStartUTC < maxBack) {
+      return NextResponse.json(
+        { error: 'You can only backfill up to 7 days back. Backfilling too far rewrites your streak' },
+        { status: 400 }
+      );
+    }
+
     // 2. Create in transaction to ensure data consistency
     const result = await prisma.$transaction(async (tx) => {
       // First find or create the habit

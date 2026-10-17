@@ -32,5 +32,6 @@ export function getTotalMinutes(logs: LogWithHabit[]): number {
 export function formatDuration(totalMinutes: number): string {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
+  // "min" rather than "m" - a bare "m" can read as months.
   return hours > 0 ? `${hours}h ${minutes}min` : `${minutes}min`;
 }
